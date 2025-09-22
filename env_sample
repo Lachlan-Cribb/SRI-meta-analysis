@@ -1,0 +1,14 @@
+DATA_DIR=/s/Epi-Dementia/Pase-ED/Biobank
+
+CORE_FILE=Generic_data/core_ukb_data/core_ukb_trimmed_Sep2023.csv
+DEMDEATH_FILE=Generic_data/core_ukb_data/latest_demdeath.csv
+SNP_FILE=Generic_data/Raw_UKB_Data/SNPs (basket 2)/snp_data.csv
+DIET_FILE=Generic_data/Raw_UKB_Data/basket 4/alcohol_diet_19_04_24.csv
+ACCEL_FILE=Generic_data/Accelerometery/Processed_GGIR/part5_daysumMM_output.csv
+SLEEP_FILE=Generic_data/Sleep_disorders/sleep_disorders_selfreport_primarycare_hosp.csv
+DISEASE_FILE=Projects/SRI-dementia/Data/disease_dates.csv
+SRI_FILE=Generic_data/Accelerometery/Processed_GGIR/part4_nightsummary_sleep_output.csv
+SLEEPREG_FILE=Generic_data/Accelerometery/sleepreg_sri/biobank_sri.csv
+
+CACHE_DIR=_targets
+OUTPUT_DIR=.
