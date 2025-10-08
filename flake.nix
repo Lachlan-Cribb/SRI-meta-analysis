@@ -38,6 +38,7 @@
               R
               quarto
               air-formatter
+              nodejs_24
             ]
             ++ (with rPackages; [
               languageserver
@@ -52,6 +53,11 @@
               lubridate
               lme4
               qs2
+              mice
+              ranger
+              rms
+              broom
+              mitools
             ]);
         };
       }
