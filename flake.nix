@@ -41,6 +41,7 @@
               nodejs_24
             ]
             ++ (with rPackages; [
+              quarto
               languageserver
               dotenv
               httpgd

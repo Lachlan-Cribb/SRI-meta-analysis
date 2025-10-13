@@ -4,6 +4,7 @@ library(crew)
 library(dotenv)
 library(qs2)
 library(tidyr)
+library(quarto)
 
 # Load environment variables from the .env file
 dotenv::load_dot_env()
@@ -119,10 +120,10 @@ list(
       pooled_results(imp_stratified, exposure, model_formula),
       pattern = cross(exposure, model_formula)
     )
-  )
+  ),
 
   ## MAIN ANALYSIS
 
   ## QUARTO REPORT
-  #tar_quarto(report, "report.qmd")
+  tar_quarto(report, "report.qmd")
 )
