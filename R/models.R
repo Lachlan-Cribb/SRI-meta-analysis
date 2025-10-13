@@ -12,7 +12,8 @@ model1 <- function(data) {
       Surv(time_to_dem, dem) ~
         x +
           ethnicity +
-          rcs(age_accel, knots_age) * sex
+          rcs(age_accel, knots_age) +
+          sex
     )
 
   model_lin_int <-
@@ -21,7 +22,6 @@ model1 <- function(data) {
         x *
           rcs(age_accel, knots_age) +
           x * sex +
-          rcs(age_accel, knots_age) * sex +
           ethnicity
     )
 
@@ -30,7 +30,8 @@ model1 <- function(data) {
       Surv(time_to_dem, dem) ~
         rcs(x, knots_x) +
           ethnicity +
-          rcs(age_accel, knots_age) * sex
+          rcs(age_accel, knots_age) +
+          sex
     )
   list(
     model_lin = model_lin,
@@ -70,18 +71,19 @@ model2 <- function(data) {
       Surv(time_to_dem, dem) ~
         x +
           ethnicity +
-          rcs(age_accel, knots_age) * sex +
+          rcs(age_accel, knots_age) +
+          sex +
           alc_freq +
           highest_qual +
-          rcs(bp_syst_avg, knots_bp) +
-          rcs(BMI, knots_BMI) +
+          bp_syst_avg +
+          BMI +
           smok_status +
           prev_diabetes +
           prev_cvd +
           prev_cancer +
           freq_depressed_twoweeks +
           insomnia_med +
-          rcs(avg_mvpa, knots_mvpa)
+          avg_mvpa
     )
 
   model_lin_int <-
@@ -90,19 +92,18 @@ model2 <- function(data) {
         x *
           rcs(age_accel, knots_age) +
           x * sex +
-          rcs(age_accel, knots_age) * sex +
           ethnicity +
           alc_freq +
           highest_qual +
-          rcs(bp_syst_avg, knots_bp) +
-          rcs(BMI, knots_BMI) +
+          bp_syst_avg +
+          BMI +
           smok_status +
           prev_diabetes +
           prev_cvd +
           prev_cancer +
           freq_depressed_twoweeks +
           insomnia_med +
-          rcs(avg_mvpa, knots_mvpa)
+          avg_mvpa
     )
 
   model_nonlin <-
@@ -110,18 +111,19 @@ model2 <- function(data) {
       Surv(time_to_dem, dem) ~
         rcs(x, knots_x) +
           ethnicity +
-          rcs(age_accel, knots_age) * sex +
+          rcs(age_accel, knots_age) +
+          sex +
           alc_freq +
           highest_qual +
-          rcs(bp_syst_avg, knots_bp) +
-          rcs(BMI, knots_BMI) +
+          bp_syst_avg +
+          BMI +
           smok_status +
           prev_diabetes +
           prev_cvd +
           prev_cancer +
           freq_depressed_twoweeks +
           insomnia_med +
-          rcs(avg_mvpa, knots_mvpa)
+          avg_mvpa
     )
   list(
     model_lin = model_lin,

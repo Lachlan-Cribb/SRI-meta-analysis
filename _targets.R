@@ -43,8 +43,8 @@ tar_option_set(
   ),
   format = "qs",
   controller = controller,
-  workspace_on_error = TRUE,
-  seed = 5678
+  seed = 5678,
+  error = "continue"
 )
 
 tar_source()
@@ -82,38 +82,47 @@ list(
   tar_target(selection_process, merged_data$selection_process),
   tar_target(df, add_sleepreg_sri(merged_data$df, sleepreg_file)),
 
-  ## AGE + SEX STRATIFIED DATASETs
-  tar_target(
-    strata,
-    c("all", "<65 males", "<65 females", "65 to 75 males", "65 to 75 females")
-  ),
-  tar_target(df_stratified, stratify_data(df, strata), pattern = map(strata)),
-
-  ## IMPUTATION
-  tar_target(imp, impute_data(df, 1, 10)),
-  tar_target(
-    mult_imp,
-    impute_data(df_stratified, 10, 10),
-    pattern = map(df_stratified)
-  ),
-
-  ## ASSUMPTION CHECKS
-  tar_map(
-    values = expand_grid(
-      exposure = c("sri", "rri"),
-      model_formula = rlang::syms(c("model1", "model2"))
-    ),
-    tar_target(assumption_check, check_model(imp, exposure, model_formula))
-  ),
-
   ## ANALYSIS PARAMETERS
   tar_target(model_formula, c("model1", "model2")),
-  tar_target(exposure, c("sri", "rri")),
+  tar_target(exposure, c("sri", "rri", "IS")),
+
+  ## IMPUTATION
+  tar_rep(mult_imp, impute_data(df, 1, 10), batches = 10),
+
+  ## SCHOENFELD RESIDUALS
+  tar_map(
+    values = expand_grid(
+      exposure = c("sri", "rri", "IS"),
+      model_formula = c("model1", "model2")
+    ),
+    tar_target(schoenfeld, test_ph(mult_imp, exposure, model_formula))
+  ),
 
   ## MAIN ANALYSIS
-  tar_target(
-    pooled_estimates,
-    fit_coxph(mult_imp, exposure, model_formula),
-    pattern = cross(mult_imp, exposure, model_formula)
+  tar_map(
+    values = list(strata = c("all", "65_to_75_males", "65_to_75_females")),
+
+    # Stratified data
+    tar_target(
+      imp_stratified,
+      stratify_data(mult_imp, strata),
+      pattern = map(mult_imp),
+    ),
+    # Assumption p values
+    tar_target(
+      assumption_checks,
+      check_model(imp_stratified, exposure, model_formula),
+      pattern = cross(exposure, model_formula)
+    ),
+    tar_target(
+      pooled_estimates,
+      pooled_results(imp_stratified, exposure, model_formula),
+      pattern = cross(exposure, model_formula)
+    )
   )
+
+  ## MAIN ANALYSIS
+
+  ## QUARTO REPORT
+  #tar_quarto(report, "report.qmd")
 )

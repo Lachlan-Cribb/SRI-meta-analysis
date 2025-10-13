@@ -1,0 +1,79 @@
+---
+title: "Results"
+format:
+    html:
+        theme: cosmo
+        toc: true
+execute:
+    echo: true
+    warning: false
+    error: false
+---
+
+::: {.panel-tabset}
+
+## Overall sample
+
+### Testing proportional hazards
+
+#### SRI
+
+```{r}
+library(targets)
+library(survival)
+plot(tar_read(schoenfeld_sri_model1), var = 1)
+```
+
+#### RRI
+
+```{r}
+library(targets)
+plot(tar_read(schoenfeld_rri_model1), var = 1)
+```
+
+#### IS
+
+```{r}
+library(targets)
+plot(tar_read(schoenfeld_IS_model1), var = 1)
+```
+
+### P values for interaction/linearity null hypotheses
+
+```{r}
+tar_read(assumption_checks_all)
+```
+
+### Hazard ratio estimate
+
+```{r}
+tar_read(pooled_estimates_all)
+```
+
+## Males aged 65-75 years
+### P values for interaction/linearity null hypotheses
+
+```{r}
+tar_read(assumption_checks_65_to_75_males)
+```
+
+### Hazard ratio estimate
+
+```{r}
+tar_read(pooled_estimates_65_to_75_males)
+```
+
+## Females aged 65-75 years
+### P values for interaction/linearity null hypotheses
+
+```{r}
+tar_read(assumption_checks_65_to_75_females)
+```
+
+### Hazard ratio estimate
+
+```{r}
+tar_read(pooled_estimates_65_to_75_females)
+```
+
+:::

@@ -109,8 +109,8 @@ create_dataset <- function(
 
   d$ethnicity <- fct_recode(
     d$ethnicity,
-    "prefer not answer" = "-3",
-    "other" = "-1",
+    NULL = "-3",
+    NULL = "-1",
     "white" = "1",
     "white" = "1001",
     "white" = "2001",
@@ -133,8 +133,6 @@ create_dataset <- function(
     "other" = "6"
   )
 
-  d$ethnicity <- fct_relevel(d$ethnicity, "white")
-
   ## sex
 
   d$sex <- as.factor(d$sex)
@@ -144,15 +142,17 @@ create_dataset <- function(
   ## depression
 
   d$freq_depressed_twoweeks <- as.factor(d$freq_depressed_twoweeks)
-
-  levels(d$freq_depressed_twoweeks) <- c(
-    "prefer not answer",
-    "dont know",
-    "not at all",
-    "several days",
-    "more than half",
-    "nearly every day"
+  d$freq_depressed_twoweeks <- fct_recode(
+    d$freq_depressed_twoweeks,
+    NULL = "prefer not answer",
+    NULL = "dont know",
+    "0" = "not at all",
+    "1" = "several days",
+    "2" = "more than half",
+    "3" = "nearly every day"
   )
+
+  d$freq_depressed_twoweeks <- as.numeric(d$freq_depressed_twoweeks)
 
   #### Trim dataset for selected sample ####
 
@@ -280,14 +280,9 @@ create_dataset <- function(
 
   is_data <- fread(is_file)
 
-  is_data <- is_data[, list(
-    eid,
-    IS_interdailystability,
-    IV_intradailyvariability,
-    IVIS_windowsize_minutes
-  )]
+  is_data <- is_data[, list(eid, IS_interdailystability)]
 
-  setnames(is_data, c("eid", "IS", "IV", "IVIS_window_size"))
+  setnames(is_data, c("eid", "IS"))
 
   d2 <- merge(d2, is_data, by = "eid", all.x = TRUE)
 
@@ -303,11 +298,14 @@ create_dataset <- function(
 
   # Date of first dementia diagnosis
 
-  demtime <- d[, `:=`(
+  demtime <- copy(d)
+
+  demtime[, `:=`(
     date_all_cause_dementia = as_date(date_all_cause_dementia),
-    dem_date_pc = as_date(dem_date_pc),
-    time_dif = date_all_cause_dementia - dem_date_pc
+    dem_date_pc = as_date(dem_date_pc)
   )]
+
+  demtime[, time_dif := date_all_cause_dementia - dem_date_pc]
 
   demtime <- demtime[, list(
     eid,
@@ -497,7 +495,6 @@ create_dataset <- function(
     alc_freq,
     avg_sri,
     IS,
-    IV,
     avg_mvpa,
     dem,
     death,

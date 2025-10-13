@@ -15,5 +15,5 @@ impute_data <- function(df, m, maxit) {
     method = "rf"
   )
   print(imp$loggedEvents)
-  complete(imp, "all")
+  as.data.table(complete(imp))
 }
