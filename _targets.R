@@ -64,6 +64,8 @@ sleepreg_file <- file.path(data_dir, Sys.getenv("SLEEPREG_FILE"))
 
 ### ANALYSIS PIPELINE
 
+## TO DO: CHECK ELIGIBILITY CRITERIA, MAKE NON_LINEARITY TABLES, & FLOW CHART
+
 list(
   ## CREATE DATASEt
   tar_target(
@@ -122,7 +124,7 @@ list(
     )
   ),
 
-  ## MAIN ANALYSIS
+  ## Non-linear analysis
 
   ## QUARTO REPORT
   tar_quarto(report, "report.qmd")
