@@ -365,12 +365,6 @@ create_dataset <- function(
 
   sample_size_info$no_prevalent_dementia <- nrow(d2)
 
-  ## Age >= 55 years
-
-  d2 <- d2[age_accel >= 55, ]
-
-  sample_size_info$age_55_over <- nrow(d2)
-
   # Sleep disorders data
   sleep_dis_df <- fread(sleep_file)
 
@@ -428,6 +422,12 @@ create_dataset <- function(
     ((as.Date(d2$date_accel) - as.Date(d2$date_baseline)) / 365)
 
   d2$age_accel <- as.numeric(d2$age_accel)
+
+  ## Age >= 55 years
+
+  d2 <- d2[age_accel >= 55, ]
+
+  sample_size_info$age_55_over <- nrow(d2)
 
   ### Add prevalent disease variables
 
