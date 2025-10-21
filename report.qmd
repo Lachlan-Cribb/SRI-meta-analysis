@@ -40,6 +40,68 @@ flow[, list(
 
 ```
 
+### Baseline characteristics
+
+```{r}
+#| tbl-cap: "Sample Characteristics"
+
+library(gtsummary)
+
+df <- as.data.table(tar_read(df))
+
+df[, list(
+    age_accel,
+    sex,
+    ethnicity,
+    BMI,
+    highest_qual,
+    bp_syst_avg,
+    smok_status,
+    avg_mvpa,
+    alc_freq,
+    apoe_e4,
+    freq_depressed_twoweeks,
+    prev_diabetes,
+    prev_cancer,
+    prev_cvd,
+    insomnia_med,
+    sri,
+    rri,
+    IS
+)] |>
+    tbl_summary(
+        statistic = list(
+            all_continuous() ~ "{mean} ({sd})",
+            all_categorical() ~ "{n} ({p}%)"
+        ),
+        label = list(
+            age_accel ~ "Age (years)",
+            sex ~ "Sex",
+            ethnicity ~ "Ethnicity",
+            BMI ~ "BMI (kg/m²)",
+            sri ~ "Sleep regularity index",
+            rri ~ "Rest Regularity index",
+            IS ~ "Interdaily stability",
+            avg_mvpa ~ "MVPA (min/day)",
+            bp_syst_avg ~ "Systolic BP (mmHg)",
+            smok_status ~ "Smoking status",
+            alc_freq ~ "Alcohol frequency",
+            highest_qual ~ "Highest education",
+            apoe_e4 ~ "APOE ε4",
+            freq_depressed_twoweeks ~ "Frequency depressed",
+            prev_diabetes ~ "Prevalent Diabetes",
+            prev_cancer ~ "Prevalent Cancer",
+            prev_cvd ~ "Prevalent CVD",
+            insomnia_med ~ "Insomnia Medication"
+        ),
+        missing_text = "Missing"
+    ) |>
+    modify_caption("**Table 1. Baseline Sample Characteristics**") |>
+    bold_labels()
+
+
+```
+
 ### Testing proportional hazards
 
 #### SRI
@@ -68,10 +130,16 @@ plot(tar_read(schoenfeld_IS_model1), var = 1)
 tar_read(assumption_checks_all)
 ```
 
-### Hazard ratio estimate
+### Hazard ratio estimates - Continuous
 
 ```{r}
 tar_read(pooled_estimates_all)
+```
+
+### Hazard ratio estimates - Categorical
+
+```{r}
+tar_read(pooled_estimates_cat_all)
 ```
 
 ## Males aged 65-75 years
@@ -81,10 +149,16 @@ tar_read(pooled_estimates_all)
 tar_read(assumption_checks_65_to_75_males)
 ```
 
-### Hazard ratio estimate
+### Hazard ratio estimates - Continuous
 
 ```{r}
 tar_read(pooled_estimates_65_to_75_males)
+```
+
+### Hazard ratio estimates - Categorical
+
+```{r}
+tar_read(pooled_estimates_cat_65_to_75_males)
 ```
 
 ## Females aged 65-75 years
@@ -94,10 +168,54 @@ tar_read(pooled_estimates_65_to_75_males)
 tar_read(assumption_checks_65_to_75_females)
 ```
 
-### Hazard ratio estimate
+### Hazard ratio estimates - Continuous
 
 ```{r}
 tar_read(pooled_estimates_65_to_75_females)
 ```
 
-:::
+### Hazard ratio estimates - Categorical
+
+```{r}
+tar_read(pooled_estimates_cat_65_to_75_females)
+```
+
+## Males aged 55-65 years
+
+### P values for interaction/linearity null hypotheses
+
+```{r}
+tar_read(assumption_checks_under_65_males)
+```
+
+### Hazard ratio estimates - Continuous
+
+```{r}
+tar_read(pooled_estimates_under_65_males)
+```
+
+### Hazard ratio estimates - Categorical
+
+```{r}
+tar_read(pooled_estimates_cat_under_65_males)
+```
+
+## Females aged 55-65 years
+
+### P values for interaction/linearity null hypotheses
+
+```{r}
+tar_read(assumption_checks_under_65_females)
+```
+
+### Hazard ratio estimates - Continuous
+
+```{r}
+tar_read(pooled_estimates_under_65_females)
+```
+
+### Hazard ratio estimates - Categorical
+
+```{r}
+tar_read(pooled_estimates_cat_under_65_females)
+```

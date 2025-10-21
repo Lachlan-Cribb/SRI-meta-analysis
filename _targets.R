@@ -103,7 +103,15 @@ list(
 
   ## MAIN ANALYSIS
   tar_map(
-    values = list(strata = c("all", "65_to_75_males", "65_to_75_females")),
+    values = list(
+      strata = c(
+        "all",
+        "65_to_75_males",
+        "65_to_75_females",
+        "under_65_males",
+        "under_65_females"
+      )
+    ),
 
     # Stratified data
     tar_target(
@@ -128,7 +136,15 @@ list(
   tar_target(imp_with_cat, add_categories(mult_imp), pattern = map(mult_imp)),
   tar_target(exposure_cat, c("sri_cat", "rri_cat", "IS_cat")),
   tar_map(
-    values = list(strata = c("all", "65_to_75_males", "65_to_75_females")),
+    values = list(
+      strata = c(
+        "all",
+        "65_to_75_males",
+        "65_to_75_females",
+        "under_65_males",
+        "under_65_females"
+      )
+    ),
 
     # Stratified data
     tar_target(

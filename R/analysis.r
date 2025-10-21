@@ -19,6 +19,10 @@ stratify_data <- function(df, strata) {
       "65_to_75_males",
       age_accel >= 65 & age_accel < 75 & sex == "female",
       "65_to_75_females",
+      age_accel < 65 & sex == "male",
+      "under_65_males",
+      age_accel < 65 & sex == "female",
+      "under_65_females",
       default = "other"
     )
   ]

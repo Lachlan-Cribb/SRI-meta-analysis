@@ -59,6 +59,7 @@
               rms
               broom
               mitools
+              gtsummary
             ]);
         };
       }
