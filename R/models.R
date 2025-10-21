@@ -33,10 +33,20 @@ model1 <- function(data) {
           rcs(age_accel, knots_age) +
           sex
     )
+
+  model_cat <-
+    as.formula(
+      Surv(time_to_dem, dem) ~
+        x_cat +
+          ethnicity +
+          rcs(age_accel, knots_age) +
+          sex
+    )
   list(
     model_lin = model_lin,
     model_nonlin = model_nonlin,
-    model_lin_int = model_lin_int
+    model_lin_int = model_lin_int,
+    model_cat = model_cat
   )
 }
 
@@ -45,24 +55,8 @@ model2 <- function(data) {
     data[["age_accel"]],
     c(0.1, 0.5, 0.9)
   )
-  knots_deprivation <- quantile(
-    data[["townsend_deprivation_index"]],
-    c(0.1, 0.5, 0.9)
-  )
   knots_x <- quantile(
     data[["x"]],
-    c(0.1, 0.5, 0.9)
-  )
-  knots_BMI <- quantile(
-    data[["BMI"]],
-    c(0.1, 0.5, 0.9)
-  )
-  knots_mvpa <- quantile(
-    data[["avg_mvpa"]],
-    c(0.1, 0.5, 0.9)
-  )
-  knots_bp <- quantile(
-    data[["bp_syst_avg"]],
     c(0.1, 0.5, 0.9)
   )
 
@@ -125,9 +119,30 @@ model2 <- function(data) {
           insomnia_med +
           avg_mvpa
     )
+
+  model_cat <-
+    as.formula(
+      Surv(time_to_dem, dem) ~
+        x_cat +
+          ethnicity +
+          rcs(age_accel, knots_age) +
+          sex +
+          alc_freq +
+          highest_qual +
+          bp_syst_avg +
+          BMI +
+          smok_status +
+          prev_diabetes +
+          prev_cvd +
+          prev_cancer +
+          freq_depressed_twoweeks +
+          insomnia_med +
+          avg_mvpa
+    )
   list(
     model_lin = model_lin,
     model_nonlin = model_nonlin,
-    model_lin_int = model_lin_int
+    model_lin_int = model_lin_int,
+    model_cat = model_cat
   )
 }

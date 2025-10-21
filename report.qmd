@@ -14,13 +14,37 @@ execute:
 
 ## Overall sample
 
+### Inclusion flow diagram
+
+```{r}
+library(targets)
+library(survival)
+library(data.table)
+
+flow <- as.data.table(tar_read(selection_process))
+flow[, `:=`(
+    Total_cohort = total_cohort,
+    Agreed_accel_study = accel_available,
+    Valid_accel_data = GGIR_checks,
+    No_prev_dementia = no_prevalent_dementia,
+    Aged_55_over = age_55_over
+)]
+
+flow[, list(
+    Total_cohort,
+    Agreed_accel_study,
+    Valid_accel_data,
+    No_prev_dementia,
+    Aged_55_over
+)]
+
+```
+
 ### Testing proportional hazards
 
 #### SRI
 
 ```{r}
-library(targets)
-library(survival)
 plot(tar_read(schoenfeld_sri_model1), var = 1)
 ```
 

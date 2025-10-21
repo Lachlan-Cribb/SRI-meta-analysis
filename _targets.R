@@ -124,7 +124,24 @@ list(
     )
   ),
 
-  ## Non-linear analysis
+  ## NON-LINEAR (CATEGORICAL) ANALYSIS
+  tar_target(imp_with_cat, add_categories(mult_imp), pattern = map(mult_imp)),
+  tar_target(exposure_cat, c("sri_cat", "rri_cat", "IS_cat")),
+  tar_map(
+    values = list(strata = c("all", "65_to_75_males", "65_to_75_females")),
+
+    # Stratified data
+    tar_target(
+      imp_stratified_cat,
+      stratify_data(imp_with_cat, strata),
+      pattern = map(imp_with_cat),
+    ),
+    tar_target(
+      pooled_estimates_cat,
+      pooled_results_cat(imp_stratified_cat, exposure_cat, model_formula),
+      pattern = cross(exposure_cat, model_formula)
+    )
+  ),
 
   ## QUARTO REPORT
   tar_quarto(report, "report.qmd")
