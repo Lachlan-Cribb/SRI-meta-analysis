@@ -58,6 +58,18 @@ create_dataset <- function(
 
   d$any_cvd <- as.factor(d$any_cvd)
 
+  d$smok_status <- as.factor(d$smok_status)
+  levels(d$smok_status) <-
+    c("prefer not answer", "never", "former", "current")
+
+  d$apoe_e4 <- as.factor(d$apoe_e4)
+
+  d$shift <- ifelse(
+    d$job_night_shift %in% c(3, 4) | d$job_shift_work %in% c(3, 4),
+    1,
+    0
+  )
+
   # Highest qualification
 
   quals <- d[, .SD, .SDcols = patterns("eid|qualifications")]
@@ -88,16 +100,23 @@ create_dataset <- function(
   ]
 
   quals[,
-    highest_qual := as.factor(ifelse(
+    highest_qual := ifelse(
       highest_qual == -Inf,
       NA_real_,
       highest_qual
-    ))
+    )
   ]
 
   d <- merge(d, quals, by = "eid", all.x = TRUE)
 
   d <- d[, .SD, .SDcols = !patterns("qualifications")]
+
+  d$highest_qual <- fct_recode(as.factor(d$highest_qual), NULL = "-3")
+  levels(d$highest_qual) <- c("Other", "CSE_GCSE", "A", "NVQ", "Grad")
+
+  # Set some categories to missing (prefer not answer)
+  d$alc_freq <- ifelse(d$alc_freq == -3, NA_real_, d$alc_freq)
+  d$smok_status <- fct_recode(d$smok_status, NULL = "prefer not answer")
 
   # medications at UKB entry
 
@@ -138,25 +157,16 @@ create_dataset <- function(
   )
 
   ## sex
-
   d$sex <- as.factor(d$sex)
-
   levels(d$sex) <- c("female", "male")
 
   ## depression
 
-  d$freq_depressed_twoweeks <- as.factor(d$freq_depressed_twoweeks)
-  d$freq_depressed_twoweeks <- fct_recode(
-    d$freq_depressed_twoweeks,
-    NULL = "prefer not answer",
-    NULL = "dont know",
-    "0" = "not at all",
-    "1" = "several days",
-    "2" = "more than half",
-    "3" = "nearly every day"
+  d$freq_depressed_twoweeks <- ifelse(
+    d$freq_depressed_twoweeks < 0,
+    NA_real_,
+    d$freq_depressed_twoweeks
   )
-
-  d$freq_depressed_twoweeks <- as.numeric(d$freq_depressed_twoweeks)
 
   #### Trim dataset for selected sample ####
 
@@ -375,50 +385,6 @@ create_dataset <- function(
   # Merge dataframes
   d2 <- d2[, !"insomnia_sr"]
   d2 <- merge(d2, sleep_dis_df, by = "eid", all.x = TRUE)
-
-  # sleep disorder prior to accelerometry?
-  d2
-  d2[, OSA_dx := ifelse(OSA_sr == 1 | date_osa_dx <= date_accel, 1, 0)]
-  d2[,
-    insomnia_dx := ifelse(
-      insomnia_sr == 1 | date_insomnia_dx <= date_accel,
-      1,
-      0
-    )
-  ]
-  d2[,
-    sleep_disorder_dx := ifelse(
-      sleep_disorder_sr == 1 | date_any_sleep_dx <= date_accel,
-      1,
-      0
-    )
-  ]
-
-  # replace missing with zero
-  sleep_disorders <- c("OSA_dx", "insomnia_dx", "sleep_disorder_dx")
-
-  d2[,
-    (sleep_disorders) := lapply(.SD, \(.x) {
-      ifelse(is.na(.x), 0, .x)
-    }),
-    .SDcols = sleep_disorders
-  ]
-
-  # set variables to factors
-  d2$smok_status <- as.factor(d2$smok_status)
-  levels(d2$smok_status) <-
-    c("prefer not answer", "never", "former", "current")
-  d2$apoe_e4 <- as.factor(d2$apoe_e4)
-  d2$shift <- ifelse(
-    d2$job_night_shift %in% c(3, 4) | d2$job_shift_work %in% c(3, 4),
-    1,
-    0
-  )
-
-  # Set some categories to missing (prefer not answer)
-  d2$alc_freq <- ifelse(d2$alc_freq == -3, NA_real_, d2$alc_freq)
-  d2$smok_status <- fct_recode(d$smok_status, NULL = "prefer not answer")
-  d2$highest_qual <- fct_recode(d$highest_qual, NULL = "-3")
 
   # Update age variable to age at accelerometry study
   d2$age_accel <-
