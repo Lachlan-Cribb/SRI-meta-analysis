@@ -405,15 +405,10 @@ create_dataset <- function(
   ]
 
   # set variables to factors
-  d2$diagnosed_diabetes <- as.factor(d2$diagnosed_diabetes)
-  levels(d2$diagnosed_diabetes) <-
-    c("prefer not answer", "dont know", "no", "yes")
   d2$smok_status <- as.factor(d2$smok_status)
   levels(d2$smok_status) <-
     c("prefer not answer", "never", "former", "current")
   d2$apoe_e4 <- as.factor(d2$apoe_e4)
-  d2$sick_disabled <- ifelse(d2$employment == "sick or disabled", 1, 0)
-  d2$retired <- ifelse(d2$employment == "retired", 1, 0)
   d2$shift <- ifelse(
     d2$job_night_shift %in% c(3, 4) | d2$job_shift_work %in% c(3, 4),
     1,
@@ -422,12 +417,8 @@ create_dataset <- function(
 
   # Set some categories to missing (prefer not answer)
   d2$alc_freq <- ifelse(d2$alc_freq == -3, NA_real_, d2$alc_freq)
-  d2$smok_status <- ifelse(
-    d2$smok_status == "prefer not answer",
-    NA,
-    d2$smok_status
-  )
-  d2$highest_qual <- ifelse(d2$highest_qual == "-3", NA, d2$highest_qual)
+  d2$smok_status <- fct_recode(d$smok_status, NULL = "prefer not answer")
+  d2$highest_qual <- fct_recode(d$highest_qual, NULL = "-3")
 
   # Update age variable to age at accelerometry study
   d2$age_accel <-
