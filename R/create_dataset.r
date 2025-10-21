@@ -88,7 +88,11 @@ create_dataset <- function(
   ]
 
   quals[,
-    highest_qual := ifelse(highest_qual == -Inf, NA_real_, highest_qual)
+    highest_qual := as.factor(ifelse(
+      highest_qual == -Inf,
+      NA_real_,
+      highest_qual
+    ))
   ]
 
   d <- merge(d, quals, by = "eid", all.x = TRUE)
@@ -415,6 +419,15 @@ create_dataset <- function(
     1,
     0
   )
+
+  # Set some categories to missing (prefer not answer)
+  d2$alc_freq <- ifelse(d2$alc_freq == -3, NA_real_, d2$alc_freq)
+  d2$smok_status <- ifelse(
+    d2$smok_status == "prefer not answer",
+    NA,
+    d2$smok_status
+  )
+  d2$highest_qual <- ifelse(d2$highest_qual == "-3", NA, d2$highest_qual)
 
   # Update age variable to age at accelerometry study
   d2$age_accel <-
