@@ -27,7 +27,7 @@ stratify_data <- function(df, strata) {
     )
   ]
   if (!strata == "all") {
-    df <- df[stratum == strata, ]
+    df <- df[grep(strata, stratum), ]
   }
   df[, stratum := strata]
   df

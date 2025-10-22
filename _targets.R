@@ -106,10 +106,12 @@ list(
     values = list(
       strata = c(
         "all",
-        "65_to_75_males",
-        "65_to_75_females",
+        "under_65",
+        "65_to_75",
         "under_65_males",
-        "under_65_females"
+        "under_65_females",
+        "65_to_75_males",
+        "65_to_75_females"
       )
     ),
 
@@ -139,10 +141,12 @@ list(
     values = list(
       strata = c(
         "all",
-        "65_to_75_males",
-        "65_to_75_females",
+        "under_65",
+        "65_to_75",
         "under_65_males",
-        "under_65_females"
+        "under_65_females",
+        "65_to_75_males",
+        "65_to_75_females"
       )
     ),
 
