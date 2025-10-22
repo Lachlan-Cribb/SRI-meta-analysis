@@ -61,6 +61,7 @@
               mitools
               gtsummary
               knitr
+              renv
             ]);
         };
       }
