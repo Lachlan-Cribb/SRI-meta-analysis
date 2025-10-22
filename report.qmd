@@ -4,6 +4,7 @@ format:
     html:
         theme: cosmo
         toc: true
+        df-print: kable
 execute:
     echo: true
     warning: false
@@ -124,7 +125,7 @@ library(targets)
 plot(tar_read(schoenfeld_IS_model1), var = 1)
 ```
 
-### P values for interaction/linearity null hypotheses
+### P values for age + sex interaction & linearity
 
 ```{r}
 tar_read(assumption_checks_all)
@@ -143,7 +144,7 @@ tar_read(pooled_estimates_cat_all)
 ```
 
 ## Males aged 65-75 years
-### P values for interaction/linearity null hypotheses
+### P values for age + sex interaction & linearity
 
 ```{r}
 tar_read(assumption_checks_65_to_75_males)
@@ -162,7 +163,7 @@ tar_read(pooled_estimates_cat_65_to_75_males)
 ```
 
 ## Females aged 65-75 years
-### P values for interaction/linearity null hypotheses
+### P values for age + sex interaction & linearity
 
 ```{r}
 tar_read(assumption_checks_65_to_75_females)
@@ -182,7 +183,7 @@ tar_read(pooled_estimates_cat_65_to_75_females)
 
 ## Males aged 55-65 years
 
-### P values for interaction/linearity null hypotheses
+### P values for age + sex interaction & linearity
 
 ```{r}
 tar_read(assumption_checks_under_65_males)
@@ -202,7 +203,7 @@ tar_read(pooled_estimates_cat_under_65_males)
 
 ## Females aged 55-65 years
 
-### P values for interaction/linearity null hypotheses
+### P values for age + sex interaction & linearity
 
 ```{r}
 tar_read(assumption_checks_under_65_females)

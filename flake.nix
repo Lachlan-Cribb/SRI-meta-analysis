@@ -60,6 +60,7 @@
               broom
               mitools
               gtsummary
+              knitr
             ]);
         };
       }

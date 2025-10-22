@@ -146,7 +146,7 @@ pooled_results_cat <- function(data, exposure, model_formula) {
     lower = round(exp(lower), 3),
     upper = round(exp(upper), 3)
   )]
-  out[
+  out <- out[
     grep("x_cat", term),
     list(
       stratum,
@@ -158,4 +158,31 @@ pooled_results_cat <- function(data, exposure, model_formula) {
       upper
     )
   ]
+  cases <- data[, .(cases = sum(dem)), by = c("x_cat", "tar_batch")][,
+    .(cases = median(cases)),
+    by = "x_cat"
+  ]
+  cases[, x_cat := paste0("x_cat", x_cat)]
+  setnames(cases, "x_cat", "term")
+  cases[, `:=`(
+    stratum = stratum,
+    exposure = exposure,
+    model_formula = model_formula
+  )]
+  out <- merge(
+    out,
+    cases,
+    by = c("term", "stratum", "exposure", "model_formula"),
+    all = TRUE
+  )
+  out[, list(
+    stratum,
+    exposure,
+    term,
+    cases,
+    model_formula,
+    HR,
+    lower,
+    upper
+  )]
 }
