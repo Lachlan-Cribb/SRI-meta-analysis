@@ -12,6 +12,7 @@ model1 <- function(data) {
       Surv(time_to_dem, dem) ~
         x +
           ethnicity +
+          highest_qual +
           rcs(age_accel, knots_age) +
           sex
     )
@@ -22,7 +23,8 @@ model1 <- function(data) {
         x *
           rcs(age_accel, knots_age) +
           x * sex +
-          ethnicity
+          ethnicity +
+          highest_qual
     )
 
   model_nonlin <-
@@ -31,7 +33,8 @@ model1 <- function(data) {
         rcs(x, knots_x) +
           ethnicity +
           rcs(age_accel, knots_age) +
-          sex
+          sex +
+          highest_qual
     )
 
   model_cat <-
@@ -40,7 +43,8 @@ model1 <- function(data) {
         x_cat +
           ethnicity +
           rcs(age_accel, knots_age) +
-          sex
+          sex +
+          highest_qual
     )
   list(
     model_lin = model_lin,

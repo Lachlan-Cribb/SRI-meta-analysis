@@ -86,8 +86,10 @@ pooled_results <- function(data, exposure, model_formula) {
     model1 = model1(data)$model_lin,
     model2 = model2(data)$model_lin
   )
+  median_total <- median(data[, .(count = .N), by = "tar_batch"]$count)
   median_cases <- median(data[, .(count = sum(dem)), by = "tar_batch"]$count)
   median_fu <- median(data[, .(fu = median(time_to_dem)), by = "tar_batch"]$fu)
+  mean_fu <- mean(data[, .(fu = mean(time_to_dem)), by = "tar_batch"]$fu)
   data_list <- split(data, data$tar_batch)
   fits <- lapply(data_list, \(.d) coxph(model_form, data = .d))
   results <- MIcombine(
@@ -100,11 +102,12 @@ pooled_results <- function(data, exposure, model_formula) {
     stratum = stratum,
     exposure = exposure,
     model_formula = model_formula,
+    median_total = median_total,
     median_cases = median_cases,
-    median_fu = round(median_fu / 365, 1),
-    HR = round(exp(estimate), 3),
-    lower = round(exp(lower), 3),
-    upper = round(exp(upper), 3)
+    median_fu = median_fu / 365,
+    mean_fu = mean_fu / 365,
+    log_HR = estimate,
+    log_HR_SE = se
   )]
   out[
     term == "x",
