@@ -74,7 +74,6 @@ model2 <- function(data) {
           smok_status +
           prev_diabetes +
           prev_cvd +
-          prev_cancer +
           freq_depressed_twoweeks +
           insomnia_med +
           avg_mvpa
@@ -94,7 +93,6 @@ model2 <- function(data) {
           smok_status +
           prev_diabetes +
           prev_cvd +
-          prev_cancer +
           freq_depressed_twoweeks +
           insomnia_med +
           avg_mvpa
@@ -114,7 +112,6 @@ model2 <- function(data) {
           smok_status +
           prev_diabetes +
           prev_cvd +
-          prev_cancer +
           freq_depressed_twoweeks +
           insomnia_med +
           avg_mvpa
@@ -134,7 +131,6 @@ model2 <- function(data) {
           smok_status +
           prev_diabetes +
           prev_cvd +
-          prev_cancer +
           freq_depressed_twoweeks +
           insomnia_med +
           avg_mvpa

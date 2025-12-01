@@ -2,6 +2,8 @@
 .direnv
 .envrc
 .pre-commit-config.yaml
+report.html
+Rplots.pdf
 
 data/
 _targets/

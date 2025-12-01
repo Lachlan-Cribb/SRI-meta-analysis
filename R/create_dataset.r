@@ -497,6 +497,11 @@ create_dataset <- function(
 add_sleepreg_sri <- function(data, sleepreg_sri_file) {
   sleepreg_sri_data <- fread(sleepreg_sri_file)
   setnames(sleepreg_sri_data, c("eid", "sri"))
+  # combine duplicated observations from sleepreg output
+  sleepreg_sri_data <- sleepreg_sri_data[,
+    .(sri = mean(sri, na.rm = TRUE)),
+    by = "eid"
+  ]
   data[, eid := as.character(eid)]
   setnames(data, "avg_sri", "rri")
   merge(data, sleepreg_sri_data, by = "eid", all.x = TRUE)

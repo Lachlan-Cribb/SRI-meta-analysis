@@ -64,7 +64,6 @@ df[, list(
     apoe_e4,
     freq_depressed_twoweeks,
     prev_diabetes,
-    prev_cancer,
     prev_cvd,
     insomnia_med,
     sri,
@@ -92,7 +91,6 @@ df[, list(
             apoe_e4 ~ "APOE ε4",
             freq_depressed_twoweeks ~ "Frequency depressed",
             prev_diabetes ~ "Prevalent Diabetes",
-            prev_cancer ~ "Prevalent Cancer",
             prev_cvd ~ "Prevalent CVD",
             insomnia_med ~ "Insomnia Medication"
         ),
