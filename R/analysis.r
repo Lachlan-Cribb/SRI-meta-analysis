@@ -15,6 +15,8 @@ test_ph <- function(data, exposure, model_formula) {
 stratify_data <- function(df, strata) {
   df[,
     stratum := fcase(
+      age_accel >= 75,
+      "75_and_over",
       age_accel >= 65 & age_accel < 75 & sex == "male",
       "65_to_75_males",
       age_accel >= 65 & age_accel < 75 & sex == "female",
@@ -27,6 +29,9 @@ stratify_data <- function(df, strata) {
     )
   ]
   if (!strata == "all") {
+    df <- df[grep(strata, stratum), ]
+  }
+  if (strata %in% c("males", "females")) {
     df <- df[grep(strata, stratum), ]
   }
   df[, stratum := strata]

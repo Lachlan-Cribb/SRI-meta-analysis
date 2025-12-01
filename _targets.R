@@ -106,8 +106,11 @@ list(
     values = list(
       strata = c(
         "all",
+        "males",
+        "females",
         "under_65",
         "65_to_75",
+        "75_and_over",
         "under_65_males",
         "under_65_females",
         "65_to_75_males",
