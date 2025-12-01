@@ -1,19 +1,12 @@
 model1 <- function(data) {
-  knots_age <- quantile(
-    data[["age_accel"]],
-    c(0.1, 0.5, 0.9)
-  )
-  knots_x <- quantile(
-    data[["x"]],
-    c(0.1, 0.5, 0.9)
-  )
   model_lin <-
     as.formula(
       Surv(time_to_dem, dem) ~
         x +
           ethnicity +
           highest_qual +
-          rcs(age_accel, knots_age) +
+          age_accel +
+          age_accel2 +
           sex
     )
 
@@ -21,7 +14,8 @@ model1 <- function(data) {
     as.formula(
       Surv(time_to_dem, dem) ~
         x *
-          rcs(age_accel, knots_age) +
+          (age_accel +
+            age_accel2) +
           x * sex +
           ethnicity +
           highest_qual
@@ -30,10 +24,12 @@ model1 <- function(data) {
   model_nonlin <-
     as.formula(
       Surv(time_to_dem, dem) ~
-        rcs(x, knots_x) +
+        x +
+          x2 +
           ethnicity +
-          rcs(age_accel, knots_age) +
-          sex +
+          age_accel +
+          age_accel2 +
+          +sex +
           highest_qual
     )
 
@@ -42,7 +38,8 @@ model1 <- function(data) {
       Surv(time_to_dem, dem) ~
         x_cat +
           ethnicity +
-          rcs(age_accel, knots_age) +
+          age_accel +
+          age_accel2 +
           sex +
           highest_qual
     )
@@ -55,21 +52,13 @@ model1 <- function(data) {
 }
 
 model2 <- function(data) {
-  knots_age <- quantile(
-    data[["age_accel"]],
-    c(0.1, 0.5, 0.9)
-  )
-  knots_x <- quantile(
-    data[["x"]],
-    c(0.1, 0.5, 0.9)
-  )
-
   model_lin <-
     as.formula(
       Surv(time_to_dem, dem) ~
         x +
           ethnicity +
-          rcs(age_accel, knots_age) +
+          age_accel +
+          age_accel2 +
           sex +
           alc_freq +
           highest_qual +
@@ -88,7 +77,8 @@ model2 <- function(data) {
     as.formula(
       Surv(time_to_dem, dem) ~
         x *
-          rcs(age_accel, knots_age) +
+          (age_accel +
+            age_accel2) +
           x * sex +
           ethnicity +
           alc_freq +
@@ -107,9 +97,11 @@ model2 <- function(data) {
   model_nonlin <-
     as.formula(
       Surv(time_to_dem, dem) ~
-        rcs(x, knots_x) +
+        x +
+          x2 +
           ethnicity +
-          rcs(age_accel, knots_age) +
+          age_accel +
+          age_accel2 +
           sex +
           alc_freq +
           highest_qual +
@@ -129,7 +121,8 @@ model2 <- function(data) {
       Surv(time_to_dem, dem) ~
         x_cat +
           ethnicity +
-          rcs(age_accel, knots_age) +
+          age_accel +
+          age_accel2 +
           sex +
           alc_freq +
           highest_qual +

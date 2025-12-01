@@ -66,7 +66,7 @@ sleepreg_file <- file.path(data_dir, Sys.getenv("SLEEPREG_FILE"))
 
 ### ANALYSIS PIPELINE
 
-strata = c(
+strata <- c(
   "all",
   "males",
   "females",
@@ -78,7 +78,6 @@ strata = c(
   "65_to_75_males",
   "65_to_75_females"
 )
-
 
 list(
   ## CREATE DATASEt
@@ -167,15 +166,20 @@ list(
   tar_map(
     values = list(strata = strata),
     tar_target(
+      imp_stratified_firth,
+      stratify_data(mult_imp, strata),
+      pattern = map(mult_imp),
+    ),
+    tar_target(
       pooled_estimates_firth,
       pooled_results(
-        imp_stratified,
+        imp_stratified_firth,
         exposure,
         model_formula,
         fine_grey = FALSE,
         firth = TRUE
       ),
-      pattern = cross(exposure, model_formula, fine_grey)
+      pattern = cross(exposure, model_formula)
     )
   ),
 

@@ -56,6 +56,11 @@ add_categories <- function(df) {
 check_model <- function(data, exposure, model_formula) {
   data <- data[tar_batch == 1, ] # first imputation
   data$x <- data[[exposure]]
+  # Add spline bases to dataset
+  data[, `:=`(
+    age_accel2 = rcspline.eval(data$age_accel, nk = 3),
+    x2 = rcspline.eval(data$x, nk = 3)
+  )]
   model_form <- switch(
     model_formula,
     model1 = model1(data),
@@ -83,7 +88,7 @@ pooled_results <- function(
   data,
   exposure,
   model_formula,
-  fine_grey = TRUE,
+  fine_grey,
   firth = FALSE
 ) {
   data$x <- data[[exposure]]
@@ -91,11 +96,24 @@ pooled_results <- function(
   if (exposure == "IS") {
     data$x <- data$x * 100
   }
+  # Add spline bases to dataset
+  data[, `:=`(
+    age_accel2 = rcspline.eval(data$age_accel, nk = 3),
+    x2 = rcspline.eval(data$x, nk = 3)
+  )]
+  sample_size <- median(data[, .(count = .N), by = "tar_batch"]$count)
+  cases <- median(data[, .(count = sum(dem)), by = "tar_batch"]$count)
+  median_fu <- median(data[, .(fu = median(time_to_dem)), by = "tar_batch"]$fu)
+  mean_fu <- mean(data[, .(fu = mean(time_to_dem)), by = "tar_batch"]$fu)
+  stratum <- unique(data$stratum)
+  # collapse employment categories for >75 age stratum
+  if (stratum == "75_and_over") {
+    data[, employ := ifelse(employ == "Sick/disabled", "Other", employ)]
+  }
   if (fine_grey) {
     data[, dem := ifelse(death == 1 & time_to_death < time_to_dem, 2, dem)]
     data[, dem := as.factor(dem)]
   }
-  stratum <- unique(data$stratum)
   model_form <- switch(
     model_formula,
     model1 = model1(data)$model_lin,
@@ -104,15 +122,11 @@ pooled_results <- function(
   if (grepl("males|females", stratum)) {
     model_form <- update.formula(model_form, ~ . - sex)
   }
-  sample_size <- median(data[, .(count = .N), by = "tar_batch"]$count)
-  cases <- median(data[, .(count = sum(dem)), by = "tar_batch"]$count)
-  median_fu <- median(data[, .(fu = median(time_to_dem)), by = "tar_batch"]$fu)
-  mean_fu <- mean(data[, .(fu = mean(time_to_dem)), by = "tar_batch"]$fu)
   data_list <- split(data, data$tar_batch)
   if (firth) {
     fits <- lapply(data_list, \(.d) coxphf(model_form, data = .d, pl = FALSE))
   } else if (fine_grey == TRUE) {
-    fits <- lapply(data_list, \(.d) crr(model_form, data = .d, pl = FALSE))
+    fits <- lapply(data_list, \(.d) crr(model_form, data = .d))
   } else {
     fits <- lapply(data_list, \(.d) coxph(model_form, data = .d))
   }
@@ -126,6 +140,7 @@ pooled_results <- function(
     stratum = stratum,
     exposure = exposure,
     model_formula = model_formula,
+    fine_grey = fine_grey,
     sample_size = sample_size,
     cases = cases,
     median_fu = median_fu / 365,
@@ -139,6 +154,7 @@ pooled_results <- function(
       stratum,
       exposure,
       model_formula,
+      fine_grey,
       sample_size,
       cases,
       mean_fu,
@@ -150,16 +166,30 @@ pooled_results <- function(
 }
 
 ## Fit categorical Cox model and pool across imputed datasets
-pooled_results_cat <- function(data, exposure, model_formula) {
+pooled_results_cat <- function(data, exposure, model_formula, fine_grey) {
   data$x_cat <- data[[exposure]]
   stratum <- unique(data$stratum)
+  # Add spline bases to dataset
+  data[, `:=`(
+    age_accel2 = rcspline.eval(data$age_accel, nk = 3),
+    x2 = rcspline.eval(data$x, nk = 3)
+  )]
   model_form <- switch(
     model_formula,
     model1 = model1(data)$model_cat,
     model2 = model2(data)$model_cat
   )
+  if (fine_grey) {
+    data[, dem := ifelse(death == 1 & time_to_death < time_to_dem, 2, dem)]
+    data[, dem := as.factor(dem)]
+  }
   data_list <- split(data, data$tar_batch)
-  fits <- lapply(data_list, \(.d) coxph(model_form, data = .d))
+  if (fine_grey) {
+    fits <- lapply(data_list, \(.d) crr(model_form, data = .d))
+  } else {
+    fits <- lapply(data_list, \(.d) coxph(model_form, data = .d))
+  }
+
   results <- MIcombine(
     results = lapply(fits, coef),
     variances = lapply(fits, vcov)
