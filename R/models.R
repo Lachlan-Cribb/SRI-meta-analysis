@@ -81,7 +81,6 @@ model2 <- function(data) {
           freq_depressed_twoweeks +
           insomnia_med +
           avg_mvpa +
-          shift +
           employ
     )
 
@@ -102,7 +101,6 @@ model2 <- function(data) {
           freq_depressed_twoweeks +
           insomnia_med +
           avg_mvpa +
-          shift +
           employ
     )
 
@@ -123,7 +121,6 @@ model2 <- function(data) {
           freq_depressed_twoweeks +
           insomnia_med +
           avg_mvpa +
-          shift +
           employ
     )
 
@@ -144,7 +141,6 @@ model2 <- function(data) {
           freq_depressed_twoweeks +
           insomnia_med +
           avg_mvpa +
-          shift +
           employ
     )
   list(

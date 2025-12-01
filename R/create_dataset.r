@@ -127,11 +127,11 @@ create_dataset <- function(
       employment_1 == 2,
       "Retired",
       employment_1 == 3,
-      "Home/family",
+      "Other",
       employment_1 == 4,
       "Sick/disabled",
       employment_1 == 5,
-      "Unemployed",
+      "Other",
       employment_1 == 6,
       "Other",
       employment_1 == 7,
@@ -384,7 +384,7 @@ create_dataset <- function(
       dem == 1,
       difftime(date_acdem2, date_accel),
       competing == 1,
-      difftime("2023-01-01", date_accel),
+      difftime(date_of_death, date_accel),
       default = difftime("2023-01-01", date_accel)
     ))
   ]

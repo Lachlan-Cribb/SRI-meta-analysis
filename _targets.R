@@ -40,7 +40,9 @@ tar_option_set(
     "rms",
     "survival",
     "broom",
-    "mitools"
+    "mitools",
+    "coxphf",
+    "tidycmprsk"
   ),
   format = "qs",
   controller = controller,
@@ -64,7 +66,19 @@ sleepreg_file <- file.path(data_dir, Sys.getenv("SLEEPREG_FILE"))
 
 ### ANALYSIS PIPELINE
 
-## TO DO: CHECK ELIGIBILITY CRITERIA, MAKE NON_LINEARITY TABLES, & FLOW CHART
+strata = c(
+  "all",
+  "males",
+  "females",
+  "under_65",
+  "65_to_75",
+  "75_and_over",
+  "under_65_males",
+  "under_65_females",
+  "65_to_75_males",
+  "65_to_75_females"
+)
+
 
 list(
   ## CREATE DATASEt
@@ -86,6 +100,7 @@ list(
   tar_target(df, add_sleepreg_sri(merged_data$df, sleepreg_file)),
 
   ## ANALYSIS PARAMETERS
+  tar_target(fine_grey, c(FALSE, TRUE)),
   tar_target(model_formula, c("model1", "model2")),
   tar_target(exposure, c("sri", "rri", "IS")),
 
@@ -103,20 +118,7 @@ list(
 
   ## MAIN ANALYSIS
   tar_map(
-    values = list(
-      strata = c(
-        "all",
-        "males",
-        "females",
-        "under_65",
-        "65_to_75",
-        "75_and_over",
-        "under_65_males",
-        "under_65_females",
-        "65_to_75_males",
-        "65_to_75_females"
-      )
-    ),
+    values = list(strata = strata),
 
     # Stratified data
     tar_target(
@@ -132,8 +134,8 @@ list(
     ),
     tar_target(
       pooled_estimates,
-      pooled_results(imp_stratified, exposure, model_formula),
-      pattern = cross(exposure, model_formula)
+      pooled_results(imp_stratified, exposure, model_formula, fine_grey),
+      pattern = cross(exposure, model_formula, fine_grey)
     )
   ),
 
@@ -141,17 +143,7 @@ list(
   tar_target(imp_with_cat, add_categories(mult_imp), pattern = map(mult_imp)),
   tar_target(exposure_cat, c("sri_cat", "rri_cat", "IS_cat")),
   tar_map(
-    values = list(
-      strata = c(
-        "all",
-        "under_65",
-        "65_to_75",
-        "under_65_males",
-        "under_65_females",
-        "65_to_75_males",
-        "65_to_75_females"
-      )
-    ),
+    values = list(strata = strata),
 
     # Stratified data
     tar_target(
@@ -161,8 +153,29 @@ list(
     ),
     tar_target(
       pooled_estimates_cat,
-      pooled_results_cat(imp_stratified_cat, exposure_cat, model_formula),
-      pattern = cross(exposure_cat, model_formula)
+      pooled_results_cat(
+        imp_stratified_cat,
+        exposure_cat,
+        model_formula,
+        fine_grey
+      ),
+      pattern = cross(exposure_cat, model_formula, fine_grey)
+    )
+  ),
+
+  ## SENSITIVITY ANALYSIS - FIRTH CORRECTION
+  tar_map(
+    values = list(strata = strata),
+    tar_target(
+      pooled_estimates_firth,
+      pooled_results(
+        imp_stratified,
+        exposure,
+        model_formula,
+        fine_grey = FALSE,
+        firth = TRUE
+      ),
+      pattern = cross(exposure, model_formula, fine_grey)
     )
   ),
 

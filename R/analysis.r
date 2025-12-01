@@ -79,11 +79,21 @@ check_model <- function(data, exposure, model_formula) {
 }
 
 ## Fit Cox model and pool across imputed datasets
-pooled_results <- function(data, exposure, model_formula) {
+pooled_results <- function(
+  data,
+  exposure,
+  model_formula,
+  fine_grey = TRUE,
+  firth = FALSE
+) {
   data$x <- data[[exposure]]
   # rescale IS to match units of over measures
   if (exposure == "IS") {
     data$x <- data$x * 100
+  }
+  if (fine_grey) {
+    data[, dem := ifelse(death == 1 & time_to_death < time_to_dem, 2, dem)]
+    data[, dem := as.factor(dem)]
   }
   stratum <- unique(data$stratum)
   model_form <- switch(
@@ -91,12 +101,21 @@ pooled_results <- function(data, exposure, model_formula) {
     model1 = model1(data)$model_lin,
     model2 = model2(data)$model_lin
   )
-  median_total <- median(data[, .(count = .N), by = "tar_batch"]$count)
-  median_cases <- median(data[, .(count = sum(dem)), by = "tar_batch"]$count)
+  if (grepl("males|females", stratum)) {
+    model_form <- update.formula(model_form, ~ . - sex)
+  }
+  sample_size <- median(data[, .(count = .N), by = "tar_batch"]$count)
+  cases <- median(data[, .(count = sum(dem)), by = "tar_batch"]$count)
   median_fu <- median(data[, .(fu = median(time_to_dem)), by = "tar_batch"]$fu)
   mean_fu <- mean(data[, .(fu = mean(time_to_dem)), by = "tar_batch"]$fu)
   data_list <- split(data, data$tar_batch)
-  fits <- lapply(data_list, \(.d) coxph(model_form, data = .d))
+  if (firth) {
+    fits <- lapply(data_list, \(.d) coxphf(model_form, data = .d, pl = FALSE))
+  } else if (fine_grey == TRUE) {
+    fits <- lapply(data_list, \(.d) crr(model_form, data = .d, pl = FALSE))
+  } else {
+    fits <- lapply(data_list, \(.d) coxph(model_form, data = .d))
+  }
   results <- MIcombine(
     results = lapply(fits, coef),
     variances = lapply(fits, vcov)
@@ -107,8 +126,8 @@ pooled_results <- function(data, exposure, model_formula) {
     stratum = stratum,
     exposure = exposure,
     model_formula = model_formula,
-    median_total = median_total,
-    median_cases = median_cases,
+    sample_size = sample_size,
+    cases = cases,
     median_fu = median_fu / 365,
     mean_fu = mean_fu / 365,
     log_HR = estimate,
@@ -120,11 +139,12 @@ pooled_results <- function(data, exposure, model_formula) {
       stratum,
       exposure,
       model_formula,
-      median_cases,
+      sample_size,
+      cases,
+      mean_fu,
       median_fu,
-      HR,
-      lower,
-      upper
+      log_HR,
+      log_HR_SE
     )
   ]
 }

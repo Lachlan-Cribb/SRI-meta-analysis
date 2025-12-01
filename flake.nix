@@ -62,6 +62,8 @@
               gtsummary
               knitr
               renv
+              coxphf
+              tidycmprsk
             ]);
         };
       }
