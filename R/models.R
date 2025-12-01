@@ -76,7 +76,9 @@ model2 <- function(data) {
           prev_cvd +
           freq_depressed_twoweeks +
           insomnia_med +
-          avg_mvpa
+          avg_mvpa +
+          shift +
+          employ
     )
 
   model_lin_int <-
@@ -95,7 +97,9 @@ model2 <- function(data) {
           prev_cvd +
           freq_depressed_twoweeks +
           insomnia_med +
-          avg_mvpa
+          avg_mvpa +
+          shift +
+          employ
     )
 
   model_nonlin <-
@@ -114,7 +118,9 @@ model2 <- function(data) {
           prev_cvd +
           freq_depressed_twoweeks +
           insomnia_med +
-          avg_mvpa
+          avg_mvpa +
+          shift +
+          employ
     )
 
   model_cat <-
@@ -133,7 +139,9 @@ model2 <- function(data) {
           prev_cvd +
           freq_depressed_twoweeks +
           insomnia_med +
-          avg_mvpa
+          avg_mvpa +
+          shift +
+          employ
     )
   list(
     model_lin = model_lin,

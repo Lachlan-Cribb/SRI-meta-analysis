@@ -114,9 +114,35 @@ create_dataset <- function(
   d$highest_qual <- fct_recode(as.factor(d$highest_qual), NULL = "-3")
   levels(d$highest_qual) <- c("Other", "CSE_GCSE", "A", "NVQ", "Grad")
 
+  ## Employment
+
+  d[,
+    employ := fcase(
+      employment_1 == -7,
+      "Other",
+      employment_1 == -3,
+      "prefer not answer",
+      employment_1 == 1,
+      "Employed",
+      employment_1 == 2,
+      "Retired",
+      employment_1 == 3,
+      "Home/family",
+      employment_1 == 4,
+      "Sick/disabled",
+      employment_1 == 5,
+      "Unemployed",
+      employment_1 == 6,
+      "Other",
+      employment_1 == 7,
+      "Other"
+    )
+  ]
+
   # Set some categories to missing (prefer not answer)
   d$alc_freq <- ifelse(d$alc_freq == -3, NA_real_, d$alc_freq)
   d$smok_status <- fct_recode(d$smok_status, NULL = "prefer not answer")
+  d$employ <- fct_recode(d$employ, NULL = "prefer not answer")
 
   # medications at UKB entry
 
@@ -479,6 +505,8 @@ create_dataset <- function(
     bp_syst_avg,
     age_accel,
     sex,
+    shift,
+    employ,
     ethnicity,
     insomnia_med,
     highest_qual,
