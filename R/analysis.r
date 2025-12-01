@@ -179,6 +179,17 @@ pooled_results_cat <- function(data, exposure, model_formula, fine_grey) {
     model1 = model1(data)$model_cat,
     model2 = model2(data)$model_cat
   )
+  cases <- data[, .(cases = sum(dem)), by = c("x_cat", "tar_batch")][,
+    .(cases = median(cases)),
+    by = "x_cat"
+  ]
+  cases[, x_cat := paste0("x_cat", x_cat)]
+  setnames(cases, "x_cat", "term")
+  cases[, `:=`(
+    stratum = stratum,
+    exposure = exposure,
+    model_formula = model_formula
+  )]
   if (fine_grey) {
     data[, dem := ifelse(death == 1 & time_to_death < time_to_dem, 2, dem)]
     data[, dem := as.factor(dem)]
@@ -216,17 +227,6 @@ pooled_results_cat <- function(data, exposure, model_formula, fine_grey) {
       upper
     )
   ]
-  cases <- data[, .(cases = sum(dem)), by = c("x_cat", "tar_batch")][,
-    .(cases = median(cases)),
-    by = "x_cat"
-  ]
-  cases[, x_cat := paste0("x_cat", x_cat)]
-  setnames(cases, "x_cat", "term")
-  cases[, `:=`(
-    stratum = stratum,
-    exposure = exposure,
-    model_formula = model_formula
-  )]
   out <- merge(
     out,
     cases,
