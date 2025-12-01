@@ -179,6 +179,9 @@ pooled_results_cat <- function(data, exposure, model_formula, fine_grey) {
     model1 = model1(data)$model_cat,
     model2 = model2(data)$model_cat
   )
+  if (grepl("males|females", stratum)) {
+    model_form <- update.formula(model_form, ~ . - sex)
+  }
   cases <- data[, .(cases = sum(dem)), by = c("x_cat", "tar_batch")][,
     .(cases = median(cases)),
     by = "x_cat"
@@ -211,9 +214,8 @@ pooled_results_cat <- function(data, exposure, model_formula, fine_grey) {
     stratum = stratum,
     exposure = exposure,
     model_formula = model_formula,
-    HR = round(exp(estimate), 3),
-    lower = round(exp(lower), 3),
-    upper = round(exp(upper), 3)
+    log_HR = estimate,
+    log_HR_SE = se
   )]
   out <- out[
     grep("x_cat", term),
@@ -222,9 +224,8 @@ pooled_results_cat <- function(data, exposure, model_formula, fine_grey) {
       exposure,
       term,
       model_formula,
-      HR,
-      lower,
-      upper
+      log_HR,
+      log_HR_SE
     )
   ]
   out <- merge(
@@ -239,8 +240,7 @@ pooled_results_cat <- function(data, exposure, model_formula, fine_grey) {
     term,
     cases,
     model_formula,
-    HR,
-    lower,
-    upper
+    log_HR,
+    log_HR_SE
   )]
 }
