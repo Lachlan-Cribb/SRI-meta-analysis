@@ -10,7 +10,7 @@ library(quarto)
 dotenv::load_dot_env()
 data_dir <- Sys.getenv("DATA_DIR")
 cache_dir <- Sys.getenv("CACHE_DIR")
-ncpus <- future::availableCores() - 1
+ncpus <- future::availableCores() - 8
 
 # set system environment variables
 

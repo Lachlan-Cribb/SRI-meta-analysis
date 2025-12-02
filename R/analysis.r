@@ -37,7 +37,7 @@ stratify_data <- function(df, strata) {
     df <- df[grep(strata, stratum), ]
   }
   if (strata %in% c("males", "females")) {
-    df <- df[grep(strata, stratum), ]
+    df <- df[grep(paste0("_", strata), stratum), ]
   }
   df[, stratum := strata]
   df
