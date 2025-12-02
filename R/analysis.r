@@ -2,6 +2,11 @@
 test_ph <- function(data, exposure, model_formula) {
   data <- data[tar_batch == 1, ] # first imputation
   data$x <- data[[exposure]]
+  # Add spline bases to dataset
+  data[, `:=`(
+    age_accel2 = rcspline.eval(data$age_accel, nk = 3),
+    x2 = rcspline.eval(data$x, nk = 3)
+  )]
   model_form <- switch(
     model_formula,
     model1 = model1(data)$model_lin,
@@ -111,7 +116,13 @@ pooled_results <- function(
     data[, employ := ifelse(employ == "Sick/disabled", "Other", employ)]
   }
   if (fine_grey) {
-    data[, dem := ifelse(death == 1 & time_to_death < time_to_dem, 2, dem)]
+    data[,
+      dem := ifelse(
+        dem == 0 & death == 1 & time_to_death <= time_to_dem,
+        2,
+        dem
+      )
+    ]
     data[, dem := as.factor(dem)]
   }
   model_form <- switch(
@@ -182,8 +193,11 @@ pooled_results_cat <- function(data, exposure, model_formula, fine_grey) {
   if (grepl("males|females", stratum)) {
     model_form <- update.formula(model_form, ~ . - sex)
   }
-  cases <- data[, .(cases = sum(dem)), by = c("x_cat", "tar_batch")][,
-    .(cases = median(cases)),
+  cases <- data[,
+    .(cases = sum(dem), sample_size = .N),
+    by = c("x_cat", "tar_batch")
+  ][,
+    .(cases = median(cases), sample_size = median(sample_size)),
     by = "x_cat"
   ]
   cases[, x_cat := paste0("x_cat", x_cat)]
@@ -194,7 +208,13 @@ pooled_results_cat <- function(data, exposure, model_formula, fine_grey) {
     model_formula = model_formula
   )]
   if (fine_grey) {
-    data[, dem := ifelse(death == 1 & time_to_death < time_to_dem, 2, dem)]
+    data[,
+      dem := ifelse(
+        dem == 0 & death == 1 & time_to_death <= time_to_dem,
+        2,
+        dem
+      )
+    ]
     data[, dem := as.factor(dem)]
   }
   data_list <- split(data, data$tar_batch)
@@ -203,7 +223,6 @@ pooled_results_cat <- function(data, exposure, model_formula, fine_grey) {
   } else {
     fits <- lapply(data_list, \(.d) coxph(model_form, data = .d))
   }
-
   results <- MIcombine(
     results = lapply(fits, coef),
     variances = lapply(fits, vcov)
@@ -214,6 +233,7 @@ pooled_results_cat <- function(data, exposure, model_formula, fine_grey) {
     stratum = stratum,
     exposure = exposure,
     model_formula = model_formula,
+    fine_grey = fine_grey,
     log_HR = estimate,
     log_HR_SE = se
   )]
@@ -224,6 +244,7 @@ pooled_results_cat <- function(data, exposure, model_formula, fine_grey) {
       exposure,
       term,
       model_formula,
+      fine_grey,
       log_HR,
       log_HR_SE
     )
@@ -238,8 +259,10 @@ pooled_results_cat <- function(data, exposure, model_formula, fine_grey) {
     stratum,
     exposure,
     term,
+    sample_size,
     cases,
     model_formula,
+    fine_grey,
     log_HR,
     log_HR_SE
   )]
