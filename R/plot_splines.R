@@ -3,6 +3,14 @@ plot_spline_association <- function(data, exposure, model_formula) {
   stratum <- unique(data$stratum)
   data$x <- data[[exposure]]
 
+  model_spec <- switch(
+    model_formula,
+    model1 = model1(data),
+    model2 = model2(data)
+  )
+
+  model_nonlin <- model_spec$model_nonlin
+
   # Tidy data
   if (exposure == "IS") {
     data$x <- data$x * 100
@@ -17,14 +25,6 @@ plot_spline_association <- function(data, exposure, model_formula) {
   if (stratum == "75_and_over") {
     data[, employ := ifelse(employ == "Sick/disabled", "Other", employ)]
   }
-
-  model_spec <- switch(
-    model_formula,
-    model1 = model1(data),
-    model2 = model2(data)
-  )
-
-  model_nonlin <- model_spec$model_nonlin
 
   # Hard code reference
   ref_exposure <- switch(
