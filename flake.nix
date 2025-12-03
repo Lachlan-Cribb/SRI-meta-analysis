@@ -60,6 +60,7 @@
               broom
               mitools
               gtsummary
+              ggplot2
               knitr
               renv
               coxphf

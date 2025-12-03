@@ -10,7 +10,7 @@ library(quarto)
 dotenv::load_dot_env()
 data_dir <- Sys.getenv("DATA_DIR")
 cache_dir <- Sys.getenv("CACHE_DIR")
-ncpus <- future::availableCores() - 8
+ncpus <- future::availableCores() - 1
 
 # set system environment variables
 
@@ -42,7 +42,8 @@ tar_option_set(
     "broom",
     "mitools",
     "coxphf",
-    "tidycmprsk"
+    "tidycmprsk",
+    "ggplot2"
   ),
   format = "qs",
   controller = controller,
@@ -131,6 +132,19 @@ list(
       check_model(imp_stratified, exposure, model_formula),
       pattern = cross(exposure, model_formula)
     ),
+
+    tar_map(
+      values = expand_grid(
+        exposure = c("sri", "rri", "IS"),
+        model_formula = c("model1", "model2")
+      ),
+      ## Spline plots
+      tar_target(
+        spline_plots,
+        plot_spline_association(imp_stratified, exposure, model_formula)
+      )
+    ),
+
     tar_target(
       pooled_estimates,
       pooled_results(imp_stratified, exposure, model_formula, fine_grey),

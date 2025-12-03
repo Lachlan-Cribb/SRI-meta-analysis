@@ -134,6 +134,25 @@ plot(tar_read(schoenfeld_IS_model1), var = 1)
 tar_read(assumption_checks_all)
 ```
 
+### Spline model visualizations
+### Model1
+
+```{r}
+#| echo: false
+tar_read(spline_plots_sri_model1_all)
+tar_read(spline_plots_rri_model1_all)
+tar_read(spline_plots_IS_model1_all)
+```
+
+### Model2
+
+```{r}
+#| echo: false
+tar_read(spline_plots_sri_model2_all)
+tar_read(spline_plots_rri_model2_all)
+tar_read(spline_plots_IS_model2_all)
+```
+
 ### Hazard ratio estimates - Continuous
 
 ```{r}
@@ -152,6 +171,25 @@ tar_read(pooled_estimates_cat_all)
 
 ```{r}
 tar_read(assumption_checks_males)
+```
+
+### Spline model visualizations
+### Model1
+
+```{r}
+#| echo: false
+tar_read(spline_plots_sri_model1_males)
+tar_read(spline_plots_rri_model1_males)
+tar_read(spline_plots_IS_model1_males)
+```
+
+### Model2
+
+```{r}
+#| echo: false
+tar_read(spline_plots_sri_model2_males)
+tar_read(spline_plots_rri_model2_males)
+tar_read(spline_plots_IS_model2_males)
 ```
 
 ### Hazard ratio estimates - Continuous
@@ -174,6 +212,25 @@ tar_read(pooled_estimates_cat_males)
 tar_read(assumption_checks_females)
 ```
 
+### Spline model visualizations
+### Model1
+
+```{r}
+#| echo: false
+tar_read(spline_plots_sri_model1_females)
+tar_read(spline_plots_rri_model1_females)
+tar_read(spline_plots_IS_model1_females)
+```
+
+### Model2
+
+```{r}
+#| echo: false
+tar_read(spline_plots_sri_model2_females)
+tar_read(spline_plots_rri_model2_females)
+tar_read(spline_plots_IS_model2_females)
+```
+
 ### Hazard ratio estimates - Continuous
 
 ```{r}
@@ -192,6 +249,25 @@ tar_read(pooled_estimates_cat_females)
 
 ```{r}
 tar_read(assumption_checks_under_65)
+```
+
+### Spline model visualizations
+### Model1
+
+```{r}
+#| echo: false
+tar_read(spline_plots_sri_model1_under_65)
+tar_read(spline_plots_rri_model1_under_65)
+tar_read(spline_plots_IS_model1_under_65)
+```
+
+### Model2
+
+```{r}
+#| echo: false
+tar_read(spline_plots_sri_model2_under_65)
+tar_read(spline_plots_rri_model2_under_65)
+tar_read(spline_plots_IS_model2_under_65)
 ```
 
 ### Hazard ratio estimates - Continuous
@@ -214,6 +290,25 @@ tar_read(pooled_estimates_cat_under_65)
 tar_read(assumption_checks_65_to_75)
 ```
 
+### Spline model visualizations
+### Model1
+
+```{r}
+#| echo: false
+tar_read(spline_plots_sri_model1_65_to_75)
+tar_read(spline_plots_rri_model1_65_to_75)
+tar_read(spline_plots_IS_model1_65_to_75)
+```
+
+### Model2
+
+```{r}
+#| echo: false
+tar_read(spline_plots_sri_model2_65_to_75)
+tar_read(spline_plots_rri_model2_65_to_75)
+tar_read(spline_plots_IS_model2_65_to_75)
+```
+
 ### Hazard ratio estimates - Continuous
 
 ```{r}
@@ -232,6 +327,25 @@ tar_read(pooled_estimates_cat_65_to_75)
 
 ```{r}
 tar_read(assumption_checks_75_and_over)
+```
+
+### Spline model visualizations
+### Model1
+
+```{r}
+#| echo: false
+tar_read(spline_plots_sri_model1_75_and_over)
+tar_read(spline_plots_rri_model1_75_and_over)
+tar_read(spline_plots_IS_model1_75_and_over)
+```
+
+### Model2
+
+```{r}
+#| echo: false
+tar_read(spline_plots_sri_model2_75_and_over)
+tar_read(spline_plots_rri_model2_75_and_over)
+tar_read(spline_plots_IS_model2_75_and_over)
 ```
 
 ### Hazard ratio estimates - Continuous
@@ -254,6 +368,25 @@ tar_read(pooled_estimates_cat_75_and_over)
 tar_read(assumption_checks_under_65_males)
 ```
 
+### Spline model visualizations
+### Model1
+
+```{r}
+#| echo: false
+tar_read(spline_plots_sri_model1_under_65_males)
+tar_read(spline_plots_rri_model1_under_65_males)
+tar_read(spline_plots_IS_model1_under_65_males)
+```
+
+### Model2
+
+```{r}
+#| echo: false
+tar_read(spline_plots_sri_model2_under_65_males)
+tar_read(spline_plots_rri_model2_under_65_males)
+tar_read(spline_plots_IS_model2_under_65_males)
+```
+
 ### Hazard ratio estimates - Continuous
 
 ```{r}
@@ -272,6 +405,25 @@ tar_read(pooled_estimates_cat_under_65_males)
 
 ```{r}
 tar_read(assumption_checks_under_65_females)
+```
+
+### Spline model visualizations
+### Model1
+
+```{r}
+#| echo: false
+tar_read(spline_plots_sri_model1_under_65_females)
+tar_read(spline_plots_rri_model1_under_65_females)
+tar_read(spline_plots_IS_model1_under_65_females)
+```
+
+### Model2
+
+```{r}
+#| echo: false
+tar_read(spline_plots_sri_model2_under_65_females)
+tar_read(spline_plots_rri_model2_under_65_females)
+tar_read(spline_plots_IS_model2_under_65_females)
 ```
 
 ### Hazard ratio estimates - Continuous
@@ -293,6 +445,25 @@ tar_read(pooled_estimates_cat_under_65_females)
 tar_read(assumption_checks_65_to_75_males)
 ```
 
+### Spline model visualizations
+### Model1
+
+```{r}
+#| echo: false
+tar_read(spline_plots_sri_model1_65_to_75_males)
+tar_read(spline_plots_rri_model1_65_to_75_males)
+tar_read(spline_plots_IS_model1_65_to_75_males)
+```
+
+### Model2
+
+```{r}
+#| echo: false
+tar_read(spline_plots_sri_model2_65_to_75_males)
+tar_read(spline_plots_rri_model2_65_to_75_males)
+tar_read(spline_plots_IS_model2_65_to_75_males)
+```
+
 ### Hazard ratio estimates - Continuous
 
 ```{r}
@@ -310,6 +481,25 @@ tar_read(pooled_estimates_cat_65_to_75_males)
 
 ```{r}
 tar_read(assumption_checks_65_to_75_females)
+```
+
+### Spline model visualizations
+### Model1
+
+```{r}
+#| echo: false
+tar_read(spline_plots_sri_model1_65_to_75_females)
+tar_read(spline_plots_rri_model1_65_to_75_females)
+tar_read(spline_plots_IS_model1_65_to_75_females)
+```
+
+### Model2
+
+```{r}
+#| echo: false
+tar_read(spline_plots_sri_model2_65_to_75_females)
+tar_read(spline_plots_rri_model2_65_to_75_females)
+tar_read(spline_plots_IS_model2_65_to_75_females)
 ```
 
 ### Hazard ratio estimates - Continuous
