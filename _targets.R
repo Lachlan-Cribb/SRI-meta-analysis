@@ -43,7 +43,8 @@ tar_option_set(
     "mitools",
     "coxphf",
     "tidycmprsk",
-    "ggplot2"
+    "ggplot2",
+    "patchwork"
   ),
   format = "qs",
   controller = controller,
@@ -133,18 +134,17 @@ list(
       pattern = cross(exposure, model_formula)
     ),
 
-    tar_map(
-      values = expand_grid(
-        exposure = c("sri", "rri", "IS"),
-        model_formula = c("model1", "model2")
-      ),
-      ## Spline plots
-      tar_target(
-        spline_plots,
-        plot_spline_association(imp_stratified, exposure, model_formula)
-      )
+    # Spline plots
+    tar_target(
+      spline_plots,
+      plot_spline_association(imp_stratified, exposure, model_formula),
+      pattern = cross(exposure, model_formula),
+      iteration = "list"
     ),
 
+    tar_target(spline_plots_combined, wrap_plots(spline_plots, ncol = 2)),
+
+    # log HRs
     tar_target(
       pooled_estimates,
       pooled_results(imp_stratified, exposure, model_formula, fine_grey),

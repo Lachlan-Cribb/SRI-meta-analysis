@@ -65,6 +65,7 @@
               renv
               coxphf
               tidycmprsk
+              patchwork
             ]);
         };
       }
