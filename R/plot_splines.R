@@ -79,14 +79,57 @@ plot_spline_association <- function(data, exposure, model_formula) {
     ) +
     labs(
       x = exposure_label,
-      y = "Hazard Ratio for Dementia",
-      title = paste0(exposure_label, " - ", model_label)
+      y = "Hazard Ratio for Dementia"
+    ) +
+    scale_y_continuous(
+      breaks = scales::breaks_extended(n = 6)
     ) +
     theme_minimal() +
     theme(
-      plot.title = element_text(size = 10, face = "bold"),
-      axis.title = element_text(size = 9),
-      axis.text = element_text(size = 8),
+      axis.title = element_text(size = 12),
+      axis.text = element_text(size = 10),
       panel.grid.minor = element_blank()
     )
+}
+
+save_plots <- function(data, plots) {
+  data <- data[tar_batch == 1, ]
+  stratum <- unique(data$stratum)
+  plot_title <- fcase(
+    stratum == "all",
+    "All participants",
+    stratum == "males",
+    "Males",
+    stratum == "females",
+    "Females",
+    stratum == "under_65",
+    "Aged <65 years",
+    stratum == "65_to_75",
+    "Aged 65 to 75 years",
+    stratum == "75_and_over",
+    "Aged >= 75 years",
+    stratum == "under_65_males",
+    "Males aged <65 years",
+    stratum == "under_65_females",
+    "Females aged <65 years",
+    stratum == "65_to_75_males",
+    "Males aged 65 to 75 years",
+    stratum == "65_to_75_females",
+    "Females aged 65 to 75 years"
+  )
+
+  ggsave(
+    paste0("Non-linear-", stratum, ".tiff"),
+    plots +
+      plot_annotation(
+        title = plot_title,
+        theme = theme(
+          plot.title = element_text(size = 16, face = "bold", hjust = 0.5)
+        )
+      ),
+    device = "tiff",
+    width = 12,
+    height = 16,
+    bg = "white"
+  )
 }

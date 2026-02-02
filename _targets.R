@@ -142,7 +142,19 @@ list(
       iteration = "list"
     ),
 
-    tar_target(spline_plots_combined, wrap_plots(spline_plots, ncol = 2)),
+    tar_target(
+      spline_plots_model2_only,
+      plot_spline_association(imp_stratified, exposure, "model2"),
+      pattern = map(exposure),
+      iteration = "list"
+    ),
+
+    tar_target(
+      spline_plots_combined,
+      wrap_plots(spline_plots_model2_only, ncol = 1)
+    ),
+
+    tar_target(saved_plots, save_plots(imp_stratified, spline_plots_combined)),
 
     # log HRs
     tar_target(

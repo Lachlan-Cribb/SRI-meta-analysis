@@ -66,6 +66,14 @@
               coxphf
               tidycmprsk
               patchwork
+              stringr
+              table1
+              openxlsx
+              scales
+              gridExtra
+              tidyverse
+              corrplot
+              svglite
             ]);
         };
       }

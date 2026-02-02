@@ -136,7 +136,7 @@ pooled_results <- function(
   data_list <- split(data, data$tar_batch)
   if (firth) {
     fits <- lapply(data_list, \(.d) coxphf(model_form, data = .d, pl = FALSE))
-  } else if (fine_grey == TRUE) {
+  } else if (fine_grey) {
     fits <- lapply(data_list, \(.d) crr(model_form, data = .d))
   } else {
     fits <- lapply(data_list, \(.d) coxph(model_form, data = .d))

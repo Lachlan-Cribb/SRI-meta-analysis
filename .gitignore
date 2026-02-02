@@ -4,6 +4,8 @@
 .pre-commit-config.yaml
 report.html
 Rplots.pdf
+descriptives*
+plots/
 
 data/
 _targets/
