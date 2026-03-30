@@ -10,7 +10,8 @@ test_ph <- function(data, exposure, model_formula) {
   model_form <- switch(
     model_formula,
     model1 = model1(data)$model_lin,
-    model2 = model2(data)$model_lin
+    model2 = model2(data)$model_lin,
+    model3 = model3(data)$model_lin
   )
   coxph_lin <- coxph(model_form, data = data)
   cox.zph(coxph_lin)
@@ -20,16 +21,16 @@ test_ph <- function(data, exposure, model_formula) {
 stratify_data <- function(df, strata) {
   df[,
     stratum := fcase(
-      age_accel >= 75,
-      "75_and_over",
-      age_accel >= 65 & age_accel < 75 & sex == "male",
-      "65_to_75_males",
-      age_accel >= 65 & age_accel < 75 & sex == "female",
-      "65_to_75_females",
-      age_accel < 65 & sex == "male",
-      "under_65_males",
-      age_accel < 65 & sex == "female",
-      "under_65_females",
+      age_accel >= 75                                    ,
+      "75_and_over"                                      ,
+      age_accel >= 65 & age_accel < 75 & sex == "male"   ,
+      "65_to_75_males"                                   ,
+      age_accel >= 65 & age_accel < 75 & sex == "female" ,
+      "65_to_75_females"                                 ,
+      age_accel < 65 & sex == "male"                     ,
+      "under_65_males"                                   ,
+      age_accel < 65 & sex == "female"                   ,
+      "under_65_females"                                 ,
       default = "other"
     )
   ]
@@ -41,6 +42,27 @@ stratify_data <- function(df, strata) {
   }
   df[, stratum := strata]
   df
+}
+
+## Create strata by APOE-e4 genotype
+stratify_apoe <- function(df, strata) {
+  df[, stratum := ifelse(apoe_e4 == "0", "APOE_non_carrier", "APOE_carrier")]
+
+  df <- df[grep(strata, stratum), ]
+  df[, stratum := strata]
+  df
+}
+
+## Age at onset table
+get_age_onset <- function(df, strata) {
+  df[
+    dem == 1,
+    list(
+      stratum = strata,
+      mean_age_onset = mean(age_accel + (time_to_dem / 365)),
+      sd_age_onset = sd(age_accel + (time_to_dem / 365))
+    )
+  ]
 }
 
 ## Add categorical versions of exposures for non-lin analysis
@@ -69,7 +91,8 @@ check_model <- function(data, exposure, model_formula) {
   model_form <- switch(
     model_formula,
     model1 = model1(data),
-    model2 = model2(data)
+    model2 = model2(data),
+    model3 = model3(data)
   )
   model_lin <- model_form$model_lin
   model_lin_int <- model_form$model_lin_int
@@ -110,6 +133,7 @@ pooled_results <- function(
   cases <- median(data[, .(count = sum(dem)), by = "tar_batch"]$count)
   median_fu <- median(data[, .(fu = median(time_to_dem)), by = "tar_batch"]$fu)
   mean_fu <- mean(data[, .(fu = mean(time_to_dem)), by = "tar_batch"]$fu)
+  sd_fu <- mean(data[, .(fu = sd(time_to_dem)), by = "tar_batch"]$fu)
   stratum <- unique(data$stratum)
   # collapse employment categories for >75 age stratum
   if (stratum == "75_and_over") {
@@ -128,7 +152,8 @@ pooled_results <- function(
   model_form <- switch(
     model_formula,
     model1 = model1(data)$model_lin,
-    model2 = model2(data)$model_lin
+    model2 = model2(data)$model_lin,
+    model3 = model3(data)$model_lin
   )
   if (grepl("males|females", stratum)) {
     model_form <- update.formula(model_form, ~ . - sex)
@@ -156,6 +181,7 @@ pooled_results <- function(
     cases = cases,
     median_fu = median_fu / 365,
     mean_fu = mean_fu / 365,
+    sd_fu = sd_fu / 365,
     log_HR = estimate,
     log_HR_SE = se
   )]
@@ -188,7 +214,8 @@ pooled_results_cat <- function(data, exposure, model_formula, fine_grey) {
   model_form <- switch(
     model_formula,
     model1 = model1(data)$model_cat,
-    model2 = model2(data)$model_cat
+    model2 = model2(data)$model_cat,
+    model3 = model3(data)$model_cat
   )
   if (grepl("males|females", stratum)) {
     model_form <- update.formula(model_form, ~ . - sex)

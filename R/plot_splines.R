@@ -6,7 +6,8 @@ plot_spline_association <- function(data, exposure, model_formula) {
   model_spec <- switch(
     model_formula,
     model1 = model1(data),
-    model2 = model2(data)
+    model2 = model2(data),
+    model3 = model3(data)
   )
 
   model_nonlin <- model_spec$model_nonlin
@@ -96,25 +97,25 @@ save_plots <- function(data, plots) {
   data <- data[tar_batch == 1, ]
   stratum <- unique(data$stratum)
   plot_title <- fcase(
-    stratum == "all",
-    "All participants",
-    stratum == "males",
-    "Males",
-    stratum == "females",
-    "Females",
-    stratum == "under_65",
-    "Aged <65 years",
-    stratum == "65_to_75",
-    "Aged 65 to 75 years",
-    stratum == "75_and_over",
-    "Aged >= 75 years",
-    stratum == "under_65_males",
-    "Males aged <65 years",
-    stratum == "under_65_females",
-    "Females aged <65 years",
-    stratum == "65_to_75_males",
-    "Males aged 65 to 75 years",
-    stratum == "65_to_75_females",
+    stratum == "all"              ,
+    "All participants"            ,
+    stratum == "males"            ,
+    "Males"                       ,
+    stratum == "females"          ,
+    "Females"                     ,
+    stratum == "under_65"         ,
+    "Aged <65 years"              ,
+    stratum == "65_to_75"         ,
+    "Aged 65 to 75 years"         ,
+    stratum == "75_and_over"      ,
+    "Aged >= 75 years"            ,
+    stratum == "under_65_males"   ,
+    "Males aged <65 years"        ,
+    stratum == "under_65_females" ,
+    "Females aged <65 years"      ,
+    stratum == "65_to_75_males"   ,
+    "Males aged 65 to 75 years"   ,
+    stratum == "65_to_75_females" ,
     "Females aged 65 to 75 years"
   )
 

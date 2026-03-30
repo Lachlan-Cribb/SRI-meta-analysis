@@ -106,6 +106,12 @@ df[, list(
 
 ```
 
+### Age at onset ###
+
+```{r}
+tar_read(age_onset_all)
+```
+
 ### Testing proportional hazards
 
 #### SRI
@@ -155,6 +161,12 @@ tar_read(pooled_estimates_cat_all)
 
 ## Males
 
+### Age at onset ###
+
+```{r}
+tar_read(age_onset_males)
+```
+
 ### P values for age + sex interaction & linearity
 
 ```{r}
@@ -181,6 +193,12 @@ tar_read(pooled_estimates_cat_males)
 ```
 
 ## Females
+
+### Age at onset ###
+
+```{r}
+tar_read(age_onset_females)
+```
 
 ### P values for age + sex interaction & linearity
 
@@ -209,6 +227,12 @@ tar_read(pooled_estimates_cat_females)
 
 ## Aged 55-65 years
 
+### Age at onset ###
+
+```{r}
+tar_read(age_onset_under_65)
+```
+
 ### P values for age + sex interaction & linearity
 
 ```{r}
@@ -236,6 +260,12 @@ tar_read(pooled_estimates_cat_under_65)
 
 ## Aged 65-75 years
 
+### Age at onset ###
+
+```{r}
+tar_read(age_onset_65_to_75)
+```
+
 ### P values for age + sex interaction & linearity
 
 ```{r}
@@ -262,6 +292,12 @@ tar_read(pooled_estimates_cat_65_to_75)
 ```
 
 ## Aged 75+
+
+### Age at onset ###
+
+```{r}
+tar_read(age_onset_75_and_over)
+```
 
 ### P values for age + sex interaction & linearity
 
@@ -409,6 +445,20 @@ rbindlist(list(
     tar_read(pooled_estimates_firth_65_to_75_males),
     tar_read(pooled_estimates_firth_65_to_75_females)
 ))
+```
+
+## Sensitivity analysis - stratified by APOE-e4
+
+### Non-carriers
+
+```{r}
+tar_read(pooled_estimates_APOE_non_carrier)
+```
+
+### Carriers
+
+```{r}
+tar_read(pooled_estimates_APOE_carrier)
 ```
 
 :::

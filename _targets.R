@@ -102,7 +102,7 @@ list(
 
   ## ANALYSIS PARAMETERS
   tar_target(fine_grey, c(FALSE, TRUE)),
-  tar_target(model_formula, c("model1", "model2")),
+  tar_target(model_formula, c("model1", "model2", "model3")),
   tar_target(exposure, c("sri", "rri", "IS")),
 
   ## IMPUTATION
@@ -127,6 +127,10 @@ list(
       stratify_data(mult_imp, strata),
       pattern = map(mult_imp),
     ),
+
+    # Age at onset table
+    tar_target(age_onset, get_age_onset(df, strata)),
+
     # Assumption p values
     tar_target(
       assumption_checks,
@@ -206,6 +210,27 @@ list(
         firth = TRUE
       ),
       pattern = cross(exposure, model_formula)
+    )
+  ),
+
+  ## SENSITIVITY ANALYSIS - APOE-e4 stratified
+
+  tar_target(apoe_formulas, c("model1", "model2")),
+
+  tar_map(
+    values = list(apoe_strata = c("APOE_carrier", "APOE_non_carrier")),
+
+    # Stratified by APOE
+    tar_target(
+      imp_apoe,
+      stratify_apoe(mult_imp, apoe_strata),
+      pattern = map(mult_imp),
+    ),
+
+    tar_target(
+      pooled_estimates,
+      pooled_results(imp_apoe, exposure, apoe_formulas, fine_grey),
+      pattern = cross(exposure, apoe_formulas, fine_grey)
     )
   ),
 

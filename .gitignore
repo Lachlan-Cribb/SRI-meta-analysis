@@ -6,6 +6,7 @@ report.html
 Rplots.pdf
 descriptives*
 plots/
+*.docx
 
 data/
 _targets/
