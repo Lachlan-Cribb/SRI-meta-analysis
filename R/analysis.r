@@ -54,8 +54,8 @@ stratify_apoe <- function(df, strata) {
 }
 
 ## Age at onset table
-get_age_onset <- function(df, strata) {
-  df[
+get_follow_up_stats <- function(df, strata) {
+  age_onset <- df[
     dem == 1,
     list(
       stratum = strata,
@@ -63,6 +63,14 @@ get_age_onset <- function(df, strata) {
       sd_age_onset = sd(age_accel + (time_to_dem / 365))
     )
   ]
+
+  follow_up <- df[,
+    list(
+      mean_fu = mean(time_to_dem / 365),
+      sd_fu = sd(time_to_dem / 365)
+    )
+  ]
+  cbind(age_onset, follow_up)
 }
 
 ## Add categorical versions of exposures for non-lin analysis

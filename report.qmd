@@ -106,10 +106,10 @@ df[, list(
 
 ```
 
-### Age at onset ###
+### Follow-up stats ###
 
 ```{r}
-tar_read(age_onset_all)
+tar_read(follow_up_stats_all)
 ```
 
 ### Testing proportional hazards
@@ -161,10 +161,10 @@ tar_read(pooled_estimates_cat_all)
 
 ## Males
 
-### Age at onset ###
+### Follow-up stats ###
 
 ```{r}
-tar_read(age_onset_males)
+tar_read(follow_up_stats_males)
 ```
 
 ### P values for age + sex interaction & linearity
@@ -194,10 +194,10 @@ tar_read(pooled_estimates_cat_males)
 
 ## Females
 
-### Age at onset ###
+### Follow-up stats ###
 
 ```{r}
-tar_read(age_onset_females)
+tar_read(follow_up_stats_females)
 ```
 
 ### P values for age + sex interaction & linearity
@@ -227,10 +227,10 @@ tar_read(pooled_estimates_cat_females)
 
 ## Aged 55-65 years
 
-### Age at onset ###
+### Follow-up stats ###
 
 ```{r}
-tar_read(age_onset_under_65)
+tar_read(follow_up_stats_under_65)
 ```
 
 ### P values for age + sex interaction & linearity
@@ -260,10 +260,10 @@ tar_read(pooled_estimates_cat_under_65)
 
 ## Aged 65-75 years
 
-### Age at onset ###
+### Follow-up stats ###
 
 ```{r}
-tar_read(age_onset_65_to_75)
+tar_read(follow_up_stats_65_to_75)
 ```
 
 ### P values for age + sex interaction & linearity
@@ -293,10 +293,10 @@ tar_read(pooled_estimates_cat_65_to_75)
 
 ## Aged 75+
 
-### Age at onset ###
+### Follow-up stats ###
 
 ```{r}
-tar_read(age_onset_75_and_over)
+tar_read(follow_up_stats_75_and_over)
 ```
 
 ### P values for age + sex interaction & linearity

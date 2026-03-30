@@ -129,7 +129,7 @@ list(
     ),
 
     # Age at onset table
-    tar_target(age_onset, get_age_onset(df, strata)),
+    tar_target(follow_up_stats, get_follow_up_stats(df, strata)),
 
     # Assumption p values
     tar_target(
