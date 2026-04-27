@@ -131,6 +131,10 @@ pooled_results <- function(
   firth = FALSE
 ) {
   data$x <- data[[exposure]]
+
+  # drop missing values in exposure
+  data <- data[!is.na(x)]
+
   # rescale IS to match units of over measures
   if (exposure == "IS") {
     data$x <- data$x * 100
