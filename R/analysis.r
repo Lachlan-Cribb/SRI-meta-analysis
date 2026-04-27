@@ -220,7 +220,7 @@ pooled_results_cat <- function(data, exposure, model_formula, fine_grey) {
   data$x_cat <- data[[exposure]]
 
   # drop missing values in exposure
-  data <- data[!is.na(x)]
+  data <- data[!is.na(x_cat)]
 
   stratum <- unique(data$stratum)
   # Add spline bases to dataset
