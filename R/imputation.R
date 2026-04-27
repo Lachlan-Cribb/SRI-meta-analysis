@@ -1,4 +1,4 @@
-impute_data <- function(df, m, maxit) {
+impute_data <- function(df, exposure_vars, m, maxit) {
   predmat <- quickpred(
     df,
     mincor = 0,
@@ -7,12 +7,18 @@ impute_data <- function(df, m, maxit) {
       "stratum"
     )
   )
+  predmat[exposure_vars, ] <- 0
+
+  methods <- make.method(df)
+  methods[methods != ""] <- "rf"
+  methods[exposure_vars] <- ""
+
   imp <- mice(
     df,
     m = m,
     predictorMatrix = predmat,
     maxit = maxit,
-    method = "rf"
+    method = methods
   )
   print(imp$loggedEvents)
   as.data.table(complete(imp))

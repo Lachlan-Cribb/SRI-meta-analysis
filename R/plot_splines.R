@@ -7,7 +7,8 @@ plot_spline_association <- function(data, exposure, model_formula) {
     model_formula,
     model1 = model1(data),
     model2 = model2(data),
-    model3 = model3(data)
+    model3 = model3(data),
+    model4 = model4(data)
   )
 
   model_nonlin <- model_spec$model_nonlin
@@ -46,8 +47,7 @@ plot_spline_association <- function(data, exposure, model_formula) {
   pred <- as.data.table(rms::Predict(
     fit,
     x = x_seq,
-    ref.zero = TRUE,
-    fun = exp
+    ref.zero = TRUE
   ))
 
   options(datadist = NULL)

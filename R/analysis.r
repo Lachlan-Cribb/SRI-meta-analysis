@@ -11,7 +11,8 @@ test_ph <- function(data, exposure, model_formula) {
     model_formula,
     model1 = model1(data)$model_lin,
     model2 = model2(data)$model_lin,
-    model3 = model3(data)$model_lin
+    model3 = model3(data)$model_lin,
+    model4 = model4(data)$model_lin
   )
   coxph_lin <- coxph(model_form, data = data)
   cox.zph(coxph_lin)
@@ -56,7 +57,7 @@ stratify_apoe <- function(df, strata) {
 ## Age at onset table
 get_follow_up_stats <- function(df, strata) {
   age_onset <- df[
-    dem == 1,
+    dem == 1 & stratum == strata,
     list(
       stratum = strata,
       mean_age_onset = mean(age_accel + (time_to_dem / 365)),
@@ -64,7 +65,8 @@ get_follow_up_stats <- function(df, strata) {
     )
   ]
 
-  follow_up <- df[,
+  follow_up <- df[
+    stratum == strata,
     list(
       mean_fu = mean(time_to_dem / 365),
       sd_fu = sd(time_to_dem / 365)
@@ -100,7 +102,8 @@ check_model <- function(data, exposure, model_formula) {
     model_formula,
     model1 = model1(data),
     model2 = model2(data),
-    model3 = model3(data)
+    model3 = model3(data),
+    model4 = model4(data)
   )
   model_lin <- model_form$model_lin
   model_lin_int <- model_form$model_lin_int
@@ -161,7 +164,8 @@ pooled_results <- function(
     model_formula,
     model1 = model1(data)$model_lin,
     model2 = model2(data)$model_lin,
-    model3 = model3(data)$model_lin
+    model3 = model3(data)$model_lin,
+    model4 = model4(data)$model_lin
   )
   if (grepl("males|females", stratum)) {
     model_form <- update.formula(model_form, ~ . - sex)
@@ -223,7 +227,8 @@ pooled_results_cat <- function(data, exposure, model_formula, fine_grey) {
     model_formula,
     model1 = model1(data)$model_cat,
     model2 = model2(data)$model_cat,
-    model3 = model3(data)$model_cat
+    model3 = model3(data)$model_cat,
+    model4 = model4(data)$model_cat
   )
   if (grepl("males|females", stratum)) {
     model_form <- update.formula(model_form, ~ . - sex)

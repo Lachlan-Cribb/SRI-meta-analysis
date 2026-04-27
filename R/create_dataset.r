@@ -78,18 +78,18 @@ create_dataset <- function(
 
   quals[,
     highest_qual := fcase(
-      value == 1,
-      4,
-      value == 6,
-      4,
-      value == 5,
-      3,
-      value == 2,
-      2,
-      value == 3,
-      1,
-      value == 4,
-      1,
+      value == 1 ,
+               4 ,
+      value == 6 ,
+               4 ,
+      value == 5 ,
+               3 ,
+      value == 2 ,
+               2 ,
+      value == 3 ,
+               1 ,
+      value == 4 ,
+               1 ,
       default = as.numeric(value)
     )
   ]
@@ -118,23 +118,23 @@ create_dataset <- function(
 
   d[,
     employ := fcase(
-      employment_1 == -7,
-      "Other",
-      employment_1 == -3,
-      "prefer not answer",
-      employment_1 == 1,
-      "Employed",
-      employment_1 == 2,
-      "Retired",
-      employment_1 == 3,
-      "Other",
-      employment_1 == 4,
-      "Sick/disabled",
-      employment_1 == 5,
-      "Other",
-      employment_1 == 6,
-      "Other",
-      employment_1 == 7,
+      employment_1 == -7  ,
+      "Other"             ,
+      employment_1 == -3  ,
+      "prefer not answer" ,
+      employment_1 == 1   ,
+      "Employed"          ,
+      employment_1 == 2   ,
+      "Retired"           ,
+      employment_1 == 3   ,
+      "Other"             ,
+      employment_1 == 4   ,
+      "Sick/disabled"     ,
+      employment_1 == 5   ,
+      "Other"             ,
+      employment_1 == 6   ,
+      "Other"             ,
+      employment_1 == 7   ,
       "Other"
     )
   ]
@@ -381,10 +381,10 @@ create_dataset <- function(
 
   d2[,
     time_to_dem := as.integer(fcase(
-      dem == 1,
-      difftime(date_acdem2, date_accel),
-      competing == 1,
-      difftime(date_of_death, date_accel),
+      dem == 1                            ,
+      difftime(date_acdem2, date_accel)   ,
+      competing == 1                      ,
+      difftime(date_of_death, date_accel) ,
       default = difftime("2023-01-01", date_accel)
     ))
   ]
@@ -425,6 +425,12 @@ create_dataset <- function(
 
   sample_size_info$age_55_over <- nrow(d2)
 
+  ## No shift workers
+
+  d2 <- d2[shift == 0, ]
+
+  sample_size_info$no_shift_workers <- nrow(d2)
+
   ### Add prevalent disease variables
 
   prev <- fread(disease_file, stringsAsFactors = TRUE)
@@ -448,40 +454,40 @@ create_dataset <- function(
 
   prev[,
     prev_diabetes := fcase(
-      sr_diabetes == 1,
-      1,
-      sr_diabetes == 0 & date_diabetes < date_accel,
-      1,
+      sr_diabetes == 1                              ,
+                                                  1 ,
+      sr_diabetes == 0 & date_diabetes < date_accel ,
+                                                  1 ,
       default = 0
     )
   ]
 
   prev[,
     prev_cancer := fcase(
-      num_sr_cancers > 0,
-      1,
-      num_sr_cancers == 0 & date_neoplasm < date_accel,
-      1,
+      num_sr_cancers > 0                               ,
+                                                     1 ,
+      num_sr_cancers == 0 & date_neoplasm < date_accel ,
+                                                     1 ,
       default = 0
     )
   ]
 
   prev[,
     prev_mental_disorder := fcase(
-      sr_mental_disorder == 1,
-      1,
-      sr_mental_disorder == 0 & date_mental_disorder < date_accel,
-      1,
+      sr_mental_disorder == 1                                     ,
+                                                                1 ,
+      sr_mental_disorder == 0 & date_mental_disorder < date_accel ,
+                                                                1 ,
       default = 0
     )
   ]
 
   prev[,
     prev_cvd := fcase(
-      sr_cvd == 1,
-      1,
-      sr_cvd == 0 & date_CVD < date_accel,
-      1,
+      sr_cvd == 1                         ,
+                                        1 ,
+      sr_cvd == 0 & date_CVD < date_accel ,
+                                        1 ,
       default = 0
     )
   ]
@@ -505,7 +511,6 @@ create_dataset <- function(
     bp_syst_avg,
     age_accel,
     sex,
-    shift,
     employ,
     ethnicity,
     insomnia_med,

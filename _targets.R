@@ -106,7 +106,7 @@ list(
   tar_target(exposure, c("sri", "rri", "IS")),
 
   ## IMPUTATION
-  tar_rep(mult_imp, impute_data(df, 1, 10), batches = 10),
+  tar_rep(mult_imp, impute_data(df, exposure, 1, 10), batches = 10),
 
   ## SCHOENFELD RESIDUALS
   tar_map(
