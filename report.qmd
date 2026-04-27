@@ -32,13 +32,21 @@ flow[, `:=`(
     Aged_55_over = age_55_over
 )]
 
-flow[, list(
-    Total_cohort,
-    Agreed_accel_study,
-    Valid_accel_data,
-    No_prev_dementia,
-    Aged_55_over
-)]
+flow[
+    ,
+    melt(
+        .SD,
+        measure.vars = c(
+            "Total_cohort",
+            "Agreed_accel_study",
+            "Valid_accel_data",
+            "No_prev_dementia",
+            "Aged_55_over"
+        ),
+        variable.name = "step",
+        value.name = "n"
+    )
+]
 
 ```
 
@@ -426,23 +434,6 @@ tar_read(pooled_estimates_65_to_75_females)
 
 ```{r}
 tar_read(pooled_estimates_cat_65_to_75_females)
-```
-
-## Sensitivity analysis - Firth correction
-
-```{r}
-rbindlist(list(
-    tar_read(pooled_estimates_firth_all),
-    tar_read(pooled_estimates_firth_males),
-    tar_read(pooled_estimates_firth_females),
-    tar_read(pooled_estimates_firth_under_65),
-    tar_read(pooled_estimates_firth_65_to_75),
-    tar_read(pooled_estimates_firth_75_and_over),
-    tar_read(pooled_estimates_firth_under_65_males),
-    tar_read(pooled_estimates_firth_under_65_females),
-    tar_read(pooled_estimates_firth_65_to_75_males),
-    tar_read(pooled_estimates_firth_65_to_75_females)
-))
 ```
 
 ## Sensitivity analysis - stratified by APOE-e4

@@ -521,7 +521,8 @@ create_dataset <- function(
     smok_status,
     prev_diabetes,
     prev_cancer,
-    prev_cvd
+    prev_cvd,
+    avg_sleep
   )]
 
   list(df = dem_model_data, selection_process = sample_size_info)

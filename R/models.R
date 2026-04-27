@@ -262,7 +262,8 @@ model4 <- function(data) {
         freq_depressed_twoweeks +
         insomnia_med +
         avg_mvpa +
-        employ
+        employ +
+        avg_sleep
     )
 
   model_lin_int <-
@@ -284,7 +285,7 @@ model4 <- function(data) {
         insomnia_med +
         avg_mvpa +
         employ +
-        avg_sleep_duration
+        avg_sleep
     )
 
   model_nonlin <-
@@ -307,7 +308,7 @@ model4 <- function(data) {
         insomnia_med +
         avg_mvpa +
         employ +
-        avg_sleep_duration
+        avg_sleep
     )
 
   model_cat <-
@@ -329,7 +330,7 @@ model4 <- function(data) {
         insomnia_med +
         avg_mvpa +
         employ +
-        avg_sleep_duration
+        avg_sleep
     )
   list(
     model_lin = model_lin,

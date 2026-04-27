@@ -101,7 +101,7 @@ list(
 
   ## ANALYSIS PARAMETERS
   tar_target(fine_grey, c(FALSE, TRUE)),
-  tar_target(model_formula, c("model1", "model2", "model3")),
+  tar_target(model_formula, c("model1", "model2", "model3", "model4")),
   tar_target(exposure, c("sri", "rri", "IS")),
 
   ## IMPUTATION
@@ -210,8 +210,8 @@ list(
       pooled_results(imp_apoe, exposure, apoe_formulas, fine_grey),
       pattern = cross(exposure, apoe_formulas, fine_grey)
     )
-  )
+  ),
 
   ## QUARTO REPORT
- # tar_quarto(report, "report.qmd")
+  tar_quarto(report, "report.qmd")
 )

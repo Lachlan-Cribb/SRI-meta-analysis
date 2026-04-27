@@ -73,14 +73,14 @@ plot_spline_association <- function(data, exposure, model_formula) {
     ) +
     geom_line(color = "steelblue", linewidth = 1) +
     geom_hline(
-      yintercept = 1,
+      yintercept = 0,
       linetype = "dashed",
       color = "red",
       alpha = 0.6
     ) +
     labs(
       x = exposure_label,
-      y = "Hazard Ratio for Dementia"
+      y = "log hazard ratio for dementia"
     ) +
     scale_y_continuous(
       breaks = scales::breaks_extended(n = 6)

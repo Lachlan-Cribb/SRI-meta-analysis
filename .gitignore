@@ -8,6 +8,7 @@ descriptives*
 plots/
 *.docx
 .codex
+*.tiff
 
 data/
 _targets/
