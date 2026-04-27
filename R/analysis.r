@@ -127,8 +127,7 @@ pooled_results <- function(
   data,
   exposure,
   model_formula,
-  fine_grey,
-  firth = FALSE
+  fine_grey
 ) {
   data$x <- data[[exposure]]
 
@@ -175,9 +174,7 @@ pooled_results <- function(
     model_form <- update.formula(model_form, ~ . - sex)
   }
   data_list <- split(data, data$tar_batch)
-  if (firth) {
-    fits <- lapply(data_list, \(.d) coxphf(model_form, data = .d, pl = FALSE))
-  } else if (fine_grey) {
+  if (fine_grey) {
     fits <- lapply(data_list, \(.d) crr(model_form, data = .d))
   } else {
     fits <- lapply(data_list, \(.d) coxph(model_form, data = .d))
@@ -221,6 +218,10 @@ pooled_results <- function(
 ## Fit categorical Cox model and pool across imputed datasets
 pooled_results_cat <- function(data, exposure, model_formula, fine_grey) {
   data$x_cat <- data[[exposure]]
+
+  # drop missing values in exposure
+  data <- data[!is.na(x)]
+
   stratum <- unique(data$stratum)
   # Add spline bases to dataset
   data[, `:=`(
