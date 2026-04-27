@@ -4,7 +4,6 @@ library(crew)
 library(dotenv)
 library(qs2)
 library(tidyr)
-library(quarto)
 
 # Load environment variables from the .env file
 dotenv::load_dot_env()
@@ -129,7 +128,7 @@ list(
     ),
 
     # Age at onset table
-    tar_target(follow_up_stats, get_follow_up_stats(df, strata)),
+    tar_target(follow_up_stats, get_follow_up_stats(imp_stratified, strata)),
 
     # Assumption p values
     tar_target(
@@ -192,30 +191,9 @@ list(
     )
   ),
 
-  ## SENSITIVITY ANALYSIS - FIRTH CORRECTION
-  tar_map(
-    values = list(strata = strata),
-    tar_target(
-      imp_stratified_firth,
-      stratify_data(mult_imp, strata),
-      pattern = map(mult_imp),
-    ),
-    tar_target(
-      pooled_estimates_firth,
-      pooled_results(
-        imp_stratified_firth,
-        exposure,
-        model_formula,
-        fine_grey = FALSE,
-        firth = TRUE
-      ),
-      pattern = cross(exposure, model_formula)
-    )
-  ),
-
   ## SENSITIVITY ANALYSIS - APOE-e4 stratified
 
-  tar_target(apoe_formulas, c("model1", "model2")),
+  tar_target(apoe_formulas, c("model1", "model2", "model4")),
 
   tar_map(
     values = list(apoe_strata = c("APOE_carrier", "APOE_non_carrier")),
@@ -232,8 +210,8 @@ list(
       pooled_results(imp_apoe, exposure, apoe_formulas, fine_grey),
       pattern = cross(exposure, apoe_formulas, fine_grey)
     )
-  ),
+  )
 
   ## QUARTO REPORT
-  tar_quarto(report, "report.qmd")
+ # tar_quarto(report, "report.qmd")
 )
